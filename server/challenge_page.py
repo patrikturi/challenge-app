@@ -56,4 +56,7 @@ class ChallengePage:
         # replaces non-breakable space with space
         kcal_str = unicodedata.normalize('NFKD', kcal_div.text)
         # eg. "123 kcal"
-        return int(kcal_str.split(' ')[0])
+        kcal_num = kcal_str.split(' ')[0]
+        if not kcal_num.isdigit():
+            return 0
+        return int(kcal_num)
