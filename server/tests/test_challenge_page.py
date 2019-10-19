@@ -1,6 +1,7 @@
 import unittest
 from pathlib import Path
 import os
+from datetime import date
 
 from server.challenge_page import ChallengePage
 
@@ -47,3 +48,9 @@ class ChallengePageTests(unittest.TestCase):
 
     def test_invalodCaloriesPage_raisesException(self):
         self.assertRaises(ValueError, lambda: self.invalid_calories_page.users)
+
+    def test_page1_startDate(self):
+        self.assertEqual(date(2019, 10, 1), self.page1.start_date)
+
+    def test_page1_endDate(self):
+        self.assertEqual(date(2019, 10, 31), self.page1.end_date)

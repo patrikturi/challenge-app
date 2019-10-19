@@ -1,5 +1,5 @@
+from datetime import datetime
 from bs4 import BeautifulSoup
-import unicodedata
 
 
 class ChallengePage:
@@ -27,6 +27,20 @@ class ChallengePage:
             users.append((name, id, calories))
         return users
 
+    @property
+    def start_date(self):
+        return self._get_date('start')
+
+    @property
+    def end_date(self):
+        return self._get_date('end')
+
+    def _get_date(self, class_name):
+        # Get start or end date
+        div = self.soup.find('div', class_=class_name)
+        date_span = div.findChild('span').find_next_sibling('span')
+        return datetime.strptime(date_span.text, "%b %d, %Y %I:%M %p").date()
+
     def _get_page_url(self, css_class):
         anchors = self.soup.find_all('a', class_=' '.join(['increment', css_class]))
         assert len(anchors) <= 1
@@ -48,8 +62,8 @@ class ChallengePage:
         anchor = self._get_anchor(anchors, user_id)
 
         calories_div = anchor.parent.find_next_sibling('div')
-        # replaces non-breakable space with space
-        calories_str = unicodedata.normalize('NFKD', calories_div.text)
+        # replace non-breakable space with space
+        calories_str = calories_div.text.replace('\xa0', ' ')
         # eg. "123 kcal"
         if 'challenge not started' in calories_str.lower():
             return 0
