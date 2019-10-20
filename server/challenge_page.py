@@ -17,12 +17,18 @@ class ChallengePage:
         return self._get_page_url('prev')
 
     @property
+    def title(self):
+        title_element = self.soup.find('title')
+        # exmaple: "Challenge Title! - 2019 | Most calories (All sports) Challenge | Endomondo"
+        return title_element.text.split(' | ')[0].strip()
+
+    @property
     def users(self):
         user_elements = self.soup.find_all('a', class_='name')
         users = []
         for user in user_elements:
             name = user.text
-            id = user['href'].split('/')[-1]
+            id = int(user['href'].split('/')[-1])
             calories = self._get_calories(id)
             users.append((name, id, calories))
         return users
@@ -65,7 +71,7 @@ class ChallengePage:
         # replace non-breakable space with space
         calories_str = calories_div.text.replace('\xa0', ' ')
         # eg. "123 kcal"
-        if 'challenge not started' in calories_str.lower():
+        if 'Challenge not started' in calories_str or 'No applicable workouts' in calories_str:
             return 0
         calories = calories_str.split(' ')[0]
         if not calories.isdigit():

@@ -33,16 +33,23 @@ class ChallengePageTests(unittest.TestCase):
 
     def test_page1_users(self):
         expected_users = [
-            ('Valid User1', '903', 25702),
-            ('Valid User árvíztűrő tükörfúrógép', '926', 22564),
-            ('Valid User3', '008', 16360)
+            ('User1', 903, 25702),
+            ('Árvíztűrő tükörfúrógép', 926, 22564),
+            ('User3', 8, 16360)
         ]
         self.assertListEqual(expected_users, self.page1.users)
 
+    def test_page2_user5HasNoWorkouts(self):
+        expected_users = [
+            ('User4', 299, 2978),
+            ('User5 No workouts', 661, 0)
+        ]
+        self.assertListEqual(expected_users, self.page2.users)
+
     def test_notStartedPage_usersHaveZeroKcal(self):
         expected_users = [
-            ('Valid User1', '190', 0),
-            ('Valid User2', '115', 0)
+            ('User1', 190, 0),
+            ('User2', 115, 0)
         ]
         self.assertListEqual(expected_users, self.not_started_page.users)
 
