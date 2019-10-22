@@ -31,6 +31,9 @@ class ChallengePageTests(unittest.TestCase):
     def test_page2_hasPrevPage(self):
         self.assertEqual('/?x=-prev-page-url', self.page2.prev_page_url)
 
+    def test_page1_title(self):
+        self.assertEqual('Challenge Title! - 2019', self.page1.title)
+
     def test_page1_users(self):
         expected_users = [
             ('User1', 903, 25702),
@@ -53,7 +56,7 @@ class ChallengePageTests(unittest.TestCase):
         ]
         self.assertListEqual(expected_users, self.not_started_page.users)
 
-    def test_invalodCaloriesPage_raisesException(self):
+    def test_invalidCaloriesPage_raisesException(self):
         self.assertRaises(ValueError, lambda: self.invalid_calories_page.users)
 
     def test_page1_startDate(self):
