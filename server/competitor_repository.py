@@ -19,8 +19,7 @@ class CompetitorRepository:
 
         if stored_competitor:
             competitor.id = stored_competitor.id
-            # TODO: preserve displayName if None
-            competitor = self.session.merge(competitor)
+            self.session.merge(competitor)
         else:
             self.session.add(competitor)
 

@@ -1,3 +1,5 @@
+from sqlalchemy import or_, and_
+
 from server.models import Challenge
 
 
@@ -8,7 +10,9 @@ class ChallengeRepository:
         self.competitor_repository = competitor_repository
 
     def get_all_active(self, current_date):
-        pass
+        return self.session.query(Challenge).filter(
+            or_(Challenge.start_date == None, Challenge.end_date == None,
+                and_(Challenge.start_date <= current_date, Challenge.end_date >= current_date))).all()
 
     def update(self, endomondo_id, challenge_page):
         challenge = self.session.query(Challenge).filter_by(endomondo_id=endomondo_id).one()
