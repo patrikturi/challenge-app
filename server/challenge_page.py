@@ -1,6 +1,8 @@
 from datetime import datetime
 from bs4 import BeautifulSoup
 
+from server.models import Competitor
+
 
 class ChallengePage:
     """Single page of a Challenge on endomondo.com"""
@@ -23,15 +25,15 @@ class ChallengePage:
         return title_element.text.split(' | ')[0].strip()
 
     @property
-    def users(self):
-        user_elements = self.soup.find_all('a', class_='name')
-        users = []
-        for user in user_elements:
-            name = user.text
-            id = int(user['href'].split('/')[-1])
+    def competitors(self):
+        elements = self.soup.find_all('a', class_='name')
+        competitors = []
+        for element in elements:
+            name = element.text
+            id = int(element['href'].split('/')[-1])
             calories = self._get_calories(id)
-            users.append((name, id, calories))
-        return users
+            competitors.append(Competitor(name=name, endomondo_id=id, calories=calories))
+        return competitors
 
     @property
     def start_date(self):
@@ -57,15 +59,15 @@ class ChallengePage:
         # Remove the initial '..' from the relative url
         return url[2:]
 
-    def _get_anchor(self, anchors, user_id):
+    def _get_profile_anchor(self, anchors, id):
         for a in anchors:
-            if a.get('href') == f'../profile/{user_id}':
+            if a.get('href') == f'../profile/{id}':
                 return a
         return None
 
-    def _get_calories(self, user_id):
+    def _get_calories(self, id):
         anchors = self.soup.select('.chart-row .bar a')
-        anchor = self._get_anchor(anchors, user_id)
+        anchor = self._get_profile_anchor(anchors, id)
 
         calories_div = anchor.parent.find_next_sibling('div')
         # replace non-breakable space with space
