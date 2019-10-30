@@ -1,14 +1,18 @@
 import os
 
 from flask import Flask
-from flask import jsonify
+
+import server.database
+from server.challenge_repository import ChallengeRepository
+from server.competitor_repository import CompetitorRepository
 
 
 def create_app(test_config=None):
+
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
-        SECRET_KEY='dev',
+        SECRET_KEY=os.environ.get('APP_SECRET_KEY', 'dev'),
         DATABASE=os.path.join(app.instance_path, 'db.sqlite'),
     )
 
@@ -23,9 +27,8 @@ def create_app(test_config=None):
     if not os.path.isdir(app.instance_path):
         os.makedirs(app.instance_path)
 
-    # a simple page that says hello
-    @app.route('/challenges/active')
-    def hello():
-        return jsonify([{'name': 'Challenge1'}, {'name': 'Challenge2'}])
+    from server import views
+
+    app.register_blueprint(views.bp)
 
     return app

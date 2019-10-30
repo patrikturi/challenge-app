@@ -1,8 +1,19 @@
-from sqlalchemy import Column, Integer, String, BigInteger, Date
+from sqlalchemy import Column, Integer, String, BigInteger, Date, inspect
 from server.database import Base
 
 
-class Challenge(Base):
+class CustomBaseMixin:
+
+    def asdict(self):
+        return {c.key: getattr(self, c.key) for c in inspect(self).mapper.column_attrs}
+
+    def __repr__(self):
+        name = self.__class__.__name__
+        props = ', '.join([f'{key}={value}' for key, value in sorted(self.asdict().items())])
+        return f'<{name}({props})>'
+
+
+class Challenge(Base, CustomBaseMixin):
     __tablename__ = 'challenges'
 
     id = Column(Integer, primary_key=True)
@@ -12,11 +23,8 @@ class Challenge(Base):
     start_date = Column(Date)
     end_date = Column(Date)
 
-    def __repr__(self):
-        return f'<Challenge(id={self.id}, endomondo_id={self.endomondo_id}, name={self.name})>'
 
-
-class Competitor(Base):
+class Competitor(Base, CustomBaseMixin):
     __tablename__ = 'competitors'
 
     id = Column(Integer, primary_key=True)
@@ -25,7 +33,3 @@ class Competitor(Base):
     calories = Column(Integer)
 
     display_name = Column(String)
-
-    def __repr__(self):
-        return f'<Competitor(id={id}, endomondo_id={self.endomondo_id}, name={self.name},' \
-               f'displayName={self.display_name}, calories={self.calories})>'

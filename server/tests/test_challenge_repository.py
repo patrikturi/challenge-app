@@ -50,12 +50,15 @@ class ChallengeRepositoryTests(unittest.TestCase):
         challenge_ended = Challenge(endomondo_id=1, start_date=date(2019, 2, 5), end_date=date(2019, 2, 14))
         challenge_running = Challenge(endomondo_id=2, start_date=date(2019, 2, 15), end_date=date(2019, 2, 28))
         challenge_not_started = Challenge(endomondo_id=3, start_date=date(2019, 2, 16), end_date=date(2019, 2, 22))
+        challenge_without_date = Challenge(endomondo_id=4)
         self.session.add(challenge_ended)
         self.session.add(challenge_running)
         self.session.add(challenge_not_started)
+        self.session.add(challenge_without_date)
         self.session.commit()
 
         all_active = self.repository.get_all_active(current_date)
 
-        self.assertEqual(1, len(all_active))
+        self.assertEqual(2, len(all_active))
         self.assertEqual(challenge_running.endomondo_id, all_active[0].endomondo_id)
+        self.assertEqual(challenge_without_date.endomondo_id, all_active[1].endomondo_id)
