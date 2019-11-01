@@ -20,12 +20,12 @@ class WebTestBase(unittest.TestCase):
         init_db()
 
         # Add some test data
-        started_ch1 = Challenge(name='Challenge1', endomondo_id=5, start_date=date(2019, 2, 1), end_date=date(2019, 2, 10))
-        started_ch2 = Challenge(name='Challenge2', endomondo_id=6, start_date=date(2019, 2, 2), end_date=date(2019, 2, 11))
-        ended_ch = Challenge(name='Challenge3', endomondo_id=7, start_date=date(2019, 1, 1), end_date=date(2019, 1, 30))
-        session.add(started_ch1)
-        session.add(started_ch2)
-        session.add(ended_ch)
+        self.challenge_started1 = Challenge(name='Challenge Running1', endomondo_id=5, start_date=date(2019, 2, 1), end_date=date(2019, 2, 10))
+        self.challenge_started2 = Challenge(name='Challenge Running2', endomondo_id=6, start_date=date(2019, 2, 2), end_date=date(2019, 2, 11))
+        self.challenge_ended1 = Challenge(name='Challenge Ended1', endomondo_id=7, start_date=date(2019, 1, 1), end_date=date(2019, 1, 30))
+        session.add(self.challenge_started1)
+        session.add(self.challenge_started2)
+        session.add(self.challenge_ended1)
         session.commit()
 
         self.context = app.test_request_context()

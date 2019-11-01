@@ -9,10 +9,19 @@ competitor_repo = CompetitorRepository(database.session)
 challenge_repo = ChallengeRepository(database.session, competitor_repo)
 
 
+def _get_date():
+    return app.config['MOCK_DATE'] if app.config.get('TESTING') else datetime.now()
+
+
 @bp.route('/challenges/active')
 def active_challenges():
-
-    current_date = app.config['MOCK_DATE'] if app.config.get('TESTING') else datetime.now()
-
+    current_date = _get_date()
     data = [challenge.asdict() for challenge in challenge_repo.get_all_active(current_date)]
+    return {'success': True, 'data': data}
+
+
+@bp.route('/challenges/inactive')
+def inactive_challenges():
+    current_date = _get_date()
+    data = [challenge.asdict() for challenge in challenge_repo.get_all_inactive(current_date)]
     return {'success': True, 'data': data}

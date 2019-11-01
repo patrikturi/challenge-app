@@ -14,6 +14,10 @@ class ChallengeRepository:
             or_(Challenge.start_date == None, Challenge.end_date == None,
                 and_(Challenge.start_date <= current_date, Challenge.end_date >= current_date))).all()
 
+    def get_all_inactive(self, current_date):
+        return self.db_session.query(Challenge).filter(or_(
+            Challenge.start_date > current_date, Challenge.end_date < current_date)).all()
+
     def update(self, endomondo_id, challenge_page):
         challenge = self.db_session.query(Challenge).filter_by(endomondo_id=endomondo_id).one()
 
