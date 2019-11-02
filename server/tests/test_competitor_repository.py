@@ -9,8 +9,8 @@ class CompetitorRepositoryTests(unittest.TestCase):
 
     def setUp(self):
         self.competitor1_id = 123
-        self.competitor1 = Competitor(name='Competitor1', endomondo_id=self.competitor1_id, calories=1000)
-        self.competitor2 = Competitor(name='Competitor2', endomondo_id=250, calories=1010)
+        self.competitor1 = Competitor(name='Competitor1', endomondo_id=self.competitor1_id)
+        self.competitor2 = Competitor(name='Competitor2', endomondo_id=250)
         self.competitors = [self.competitor1, self.competitor2]
 
         database.init_db()
@@ -27,7 +27,6 @@ class CompetitorRepositoryTests(unittest.TestCase):
         competitor = self.session.query(Competitor).filter_by(endomondo_id=self.competitor1_id).one()
         self.assertEqual(self.competitor1.name, competitor.name)
         self.assertEqual(self.competitor1.endomondo_id, competitor.endomondo_id)
-        self.assertEqual(self.competitor1.calories, competitor.calories)
 
     def test_saveOrUpdate_existingCompetitorUpdated(self):
         competitor = Competitor(endomondo_id=self.competitor1_id)
@@ -39,13 +38,12 @@ class CompetitorRepositoryTests(unittest.TestCase):
         self.session.refresh(competitor)
         self.assertEqual(self.competitor1.name, competitor.name)
         self.assertEqual(self.competitor1.endomondo_id, competitor.endomondo_id)
-        self.assertEqual(self.competitor1.calories, competitor.calories)
 
     def test_saveOrUpdate_existingDisplayNamePreserved(self):
         # Name is parsed from Endomondo but DisplayName can be set in this webapp to override it
         # so DisplayName always will be None when parsing data from Endomondo
         display_name = 'Display Name'
-        orig_competitor = Competitor(name='Competitor1', display_name=display_name, endomondo_id=self.competitor1_id, calories=900)
+        orig_competitor = Competitor(name='Competitor1', display_name=display_name, endomondo_id=self.competitor1_id)
         self.session.add(orig_competitor)
         self.session.commit()
 
@@ -54,7 +52,6 @@ class CompetitorRepositoryTests(unittest.TestCase):
 
         competitor = self.session.query(Competitor).filter_by(endomondo_id=self.competitor1_id).one()
         self.assertEqual(display_name, competitor.display_name)
-        self.assertEqual(self.competitor1.calories, competitor.calories)
 
     def test_saveOrUpdateAll_allCompetitorsCreated(self):
         self.repository.save_or_update_all(self.competitors)

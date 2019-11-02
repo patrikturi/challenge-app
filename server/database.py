@@ -14,7 +14,6 @@ session = scoped_session(_session_maker)
 
 
 def init_db():
-    import server.models
     Base.metadata.create_all(bind=_engine)
 
 

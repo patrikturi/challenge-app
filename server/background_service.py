@@ -12,5 +12,6 @@ class BackgroundService:
 
         for challenge in challenges:
             page_data = endomondo_api.get_page(f'http://endomondo.com/challenges/{challenge.endomondo_id}')
+            # FIXME: walk prev/next pages
             page = ChallengePage(page_data)
             self.challenge_repository.update(challenge.endomondo_id, page)

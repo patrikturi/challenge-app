@@ -38,25 +38,28 @@ class ChallengePageTests(unittest.TestCase):
 
     def test_page1_competitors(self):
         expected_competitors = [
-            Competitor(name='Competitor1', endomondo_id=903, calories=25702),
-            Competitor(name='Árvíztűrő tükörfúrógép', endomondo_id=926, calories=22564),
-            Competitor(name='Competitor3', endomondo_id=8, calories=16360)
+            Competitor(name='Competitor1', endomondo_id=903),
+            Competitor(name='Árvíztűrő tükörfúrógép', endomondo_id=926),
+            Competitor(name='Competitor3', endomondo_id=8)
         ]
         self.assert_competitors(expected_competitors, self.page1.competitors)
+        self.assert_calories(self.page1, {903: 25702, 926: 22564, 8: 16360})
 
     def test_page2_user5HasNoWorkouts(self):
         expected_competitors = [
-            Competitor(name='Competitor4', endomondo_id=299, calories=2978),
-            Competitor(name='Competitor5 No workouts', endomondo_id=661, calories=0)
+            Competitor(name='Competitor4', endomondo_id=299),
+            Competitor(name='Competitor5 No workouts', endomondo_id=661)
         ]
         self.assert_competitors(expected_competitors, self.page2.competitors)
+        self.assert_calories(self.page2, {299: 2978, 661: 0})
 
     def test_notStartedPage_competitorsHaveZeroKcal(self):
         expected_competitors = [
-            Competitor(name='Competitor1', endomondo_id=190, calories=0),
-            Competitor(name='Competitor2', endomondo_id=115, calories=0)
+            Competitor(name='Competitor1', endomondo_id=190),
+            Competitor(name='Competitor2', endomondo_id=115)
         ]
         self.assert_competitors(expected_competitors, self.not_started_page.competitors)
+        self.assert_calories(self.not_started_page, {190: 0, 115: 0})
 
     def test_invalidCaloriesPage_raisesException(self):
         self.assertRaises(ValueError, lambda: self.invalid_calories_page.competitors)
@@ -69,11 +72,15 @@ class ChallengePageTests(unittest.TestCase):
 
     def assert_competitors(self, expected_list, actual_list):
         for expected, actual in zip(expected_list, actual_list):
-            if expected.name != actual.name or expected.endomondo_id != actual.endomondo_id \
-                    or expected.calories != actual.calories:
+            if expected.name != actual.name or expected.endomondo_id != actual.endomondo_id:
                 exp_str = self._competitor_assert_str(expected)
                 act_str = self._competitor_assert_str(actual)
                 raise AssertionError(f'Competitors not equal. Expected: {exp_str} Actual: {act_str}')
 
+    def assert_calories(self, page, expected_calories):
+        for competitor in page.competitors:
+            endomondo_id = competitor.endomondo_id
+            self.assertEqual(expected_calories[endomondo_id], page.get_calories(endomondo_id))
+
     def _competitor_assert_str(self, expected):
-        return f'(name={expected.name}, endomondo_id={expected.endomondo_id}, calories={expected.calories})'
+        return f'(name={expected.name}, endomondo_id={expected.endomondo_id})'

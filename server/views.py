@@ -2,11 +2,13 @@ from flask import Blueprint, current_app as app
 from datetime import datetime
 
 from server import CompetitorRepository, database, ChallengeRepository
+from server.calories_repository import CaloriesRepository
 
 bp = Blueprint("views", __name__)
 
 competitor_repo = CompetitorRepository(database.session)
-challenge_repo = ChallengeRepository(database.session, competitor_repo)
+calories_repo = CaloriesRepository(database.session)
+challenge_repo = ChallengeRepository(database.session, competitor_repo, calories_repo)
 
 
 def _get_date():

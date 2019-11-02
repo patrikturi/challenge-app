@@ -13,7 +13,8 @@ class ChallengeRepositoryTests(unittest.TestCase):
         database.init_db()
         self.session = database.session()
         self.competitor_repository = Mock()
-        self.repository = ChallengeRepository(self.session, self.competitor_repository)
+        self.calories_repository = Mock()
+        self.repository = ChallengeRepository(self.session, self.competitor_repository, self.calories_repository)
 
         self.current_date = date(2019, 2, 15)
         self.challenge_ended = Challenge(endomondo_id=1, start_date=date(2019, 2, 5), end_date=date(2019, 2, 14))
@@ -56,6 +57,7 @@ class ChallengeRepositoryTests(unittest.TestCase):
         self.assertEqual(end_date, challenge.end_date)
 
         self.competitor_repository.save_or_update_all.assert_called_once_with(challenge_page.competitors)
+        self.calories_repository.save_calories.assert_called_once_with(remote_id, challenge_page)
 
     def test_getAllActive_returnsChallengesRunningOrWithoutDate(self):
 

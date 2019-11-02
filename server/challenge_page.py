@@ -9,6 +9,8 @@ class ChallengePage:
 
     def __init__(self, html_string):
         self.soup = BeautifulSoup(html_string, 'html.parser')
+        # Competitor endomondo id to kcal
+        self.calories = {}
 
     @property
     def next_page_url(self):
@@ -31,9 +33,13 @@ class ChallengePage:
         for element in elements:
             name = element.text
             id = int(element['href'].split('/')[-1])
-            calories = self._get_calories(id)
-            competitors.append(Competitor(name=name, endomondo_id=id, calories=calories))
+            competitors.append(Competitor(name=name, endomondo_id=id))
+            calories = self._parse_calories(id)
+            self.calories[id] = calories
         return competitors
+
+    def get_calories(self, competitor_id):
+        return self.calories[competitor_id]
 
     @property
     def start_date(self):
@@ -65,7 +71,7 @@ class ChallengePage:
                 return a
         return None
 
-    def _get_calories(self, id):
+    def _parse_calories(self, id):
         anchors = self.soup.select('.chart-row .bar a')
         anchor = self._get_profile_anchor(anchors, id)
 

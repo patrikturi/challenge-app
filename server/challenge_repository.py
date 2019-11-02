@@ -5,9 +5,10 @@ from server.models import Challenge
 
 class ChallengeRepository:
 
-    def __init__(self, session, competitor_repository):
+    def __init__(self, session, competitor_repository, calories_repository):
         self.db_session = session
         self.competitor_repository = competitor_repository
+        self.calories_repository = calories_repository
 
     def get_all_active(self, current_date):
         return self.db_session.query(Challenge).filter(
@@ -27,3 +28,4 @@ class ChallengeRepository:
         self.db_session.commit()
 
         self.competitor_repository.save_or_update_all(challenge_page.competitors)
+        self.calories_repository.save_calories(endomondo_id, challenge_page)

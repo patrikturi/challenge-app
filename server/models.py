@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, BigInteger, Date, inspect
+from sqlalchemy import Column, Integer, String, BigInteger, Date, inspect, ForeignKey
 from server.database import Base
 
 
@@ -30,6 +30,13 @@ class Competitor(Base, CustomBaseMixin):
     id = Column(Integer, primary_key=True)
     endomondo_id = Column(BigInteger, nullable=False, index=True, unique=True)
     name = Column(String)
-    calories = Column(Integer)
 
     display_name = Column(String)
+
+
+class Calories(Base, CustomBaseMixin):
+    __tablename__ = 'calories'
+    id = Column(Integer, primary_key=True)
+    competitor_id = Column(Integer, ForeignKey('competitors.id'), nullable=False)
+    challenge_id = Column(Integer, ForeignKey('challenges.id'), nullable=False)
+    kcal = Column(Integer, nullable=False)
