@@ -1,3 +1,5 @@
+[![Build Status](https://dev.azure.com/patrikturi/endomondo-team-challenge/_apis/build/status/patrikturi.endomondo-team-challenge?branchName=azure-pipeline)](https://dev.azure.com/patrikturi/endomondo-team-challenge/_build/latest?definitionId=3&branchName=master)
+
 ## Description
 
 [Endomondo](http://endomondo.com) allows users to track their fitness and health statistics with a mobile application and website.
@@ -9,4 +11,5 @@ Endomondo challenges allow users to compete based on calories burnt.
 ## Authors
 
 Ákos Denke: Original idea/prototype
+
 Patrik Túri: Rewrite and generalization
