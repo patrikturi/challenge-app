@@ -8,12 +8,12 @@ class CaloriesRepository:
 
     def save_calories(self, challenge_id, page):
         for competitor in page.competitors:
-            kcal = page.get_calories(competitor.endomondo_id)
-            calories = self.db_session.query(Calories).filter_by(challenge_id=challenge_id, competitor_id=competitor.endomondo_id).one_or_none()
+            kcal = page.get_calories(competitor.id)
+            calories = self.db_session.query(Calories).filter_by(challenge_id=challenge_id, competitor_id=competitor.id).one_or_none()
             if calories:
                 calories.kcal = kcal
             else:
-                calories = Calories(challenge_id=challenge_id, competitor_id=competitor.endomondo_id, kcal=kcal)
+                calories = Calories(challenge_id=challenge_id, competitor_id=competitor.id, kcal=kcal)
                 self.db_session.add(calories)
         self.db_session.commit()
 
