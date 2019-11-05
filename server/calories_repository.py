@@ -1,4 +1,4 @@
-from server.models import Calories
+from server.models.calories import Calories
 
 
 class CaloriesRepository:

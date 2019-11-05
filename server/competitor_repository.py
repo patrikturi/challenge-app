@@ -1,7 +1,4 @@
-from sqlalchemy import or_, and_
-
-from server.challenge_page import ChallengePage
-from server.models import Challenge, Competitor
+from server.models.competitor import Competitor
 
 
 class CompetitorRepository:

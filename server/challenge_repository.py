@@ -1,6 +1,6 @@
 from sqlalchemy import or_, and_
 
-from server.models import Challenge
+from server.models.challenge import Challenge
 
 
 class ChallengeRepository:

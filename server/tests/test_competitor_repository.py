@@ -1,7 +1,7 @@
 import unittest
 
 from server import database
-from server.models import Competitor
+from server.models.competitor import Competitor
 from server.competitor_repository import CompetitorRepository
 
 

@@ -4,7 +4,7 @@ from unittest.mock import Mock
 
 from server import database
 from server.challenge_repository import ChallengeRepository
-from server.models import Challenge
+from server.models.challenge import Challenge
 
 
 class ChallengeRepositoryTests(unittest.TestCase):

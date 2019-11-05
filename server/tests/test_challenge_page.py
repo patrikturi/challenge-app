@@ -4,7 +4,7 @@ import os
 from datetime import date
 
 from server.challenge_page import ChallengePage
-from server.models import Competitor
+from server.models.competitor import Competitor
 
 
 class ChallengePageTests(unittest.TestCase):

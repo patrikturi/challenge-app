@@ -3,7 +3,7 @@ import unittest
 
 from server import create_app
 from server.database import init_db, drop_tables, session
-from server.models import Challenge
+from server.models.challenge import Challenge
 
 
 class WebTestBase(unittest.TestCase):

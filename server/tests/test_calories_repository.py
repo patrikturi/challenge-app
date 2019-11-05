@@ -3,7 +3,9 @@ from unittest.mock import Mock
 
 from server import database
 from server.calories_repository import CaloriesRepository
-from server.models import Competitor, Challenge, Calories
+from server.models.competitor import Competitor
+from server.models.challenge import Challenge
+from server.models.calories import Calories
 
 
 class CaloriesRepositoryTests(unittest.TestCase):
