@@ -1,4 +1,4 @@
-from server.tests.webtest_base import WebTestBase
+from tests.unittests.webtest_base import WebTestBase
 
 
 class ViewTests(WebTestBase):
