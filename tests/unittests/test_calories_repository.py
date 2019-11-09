@@ -33,6 +33,7 @@ class CaloriesRepositoryTests(unittest.TestCase):
 
     def tearDown(self):
         database.drop_tables()
+        self.session.close()
 
     def test_saveCalories_storesCaloriesRecord(self):
         self.repository.save_calories(self.challenge.id, self.page)
