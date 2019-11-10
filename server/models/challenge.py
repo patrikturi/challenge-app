@@ -23,13 +23,11 @@ class Challenge(AbstractBase):
         all_calories = self.session.query(Calories).filter_by(challenge_id=self.id).all()
         return {calories.competitor_id: calories.kcal for calories in all_calories}
 
-    def update(self, endomondo_id, challenge_page):
-        challenge = self.session.query(Challenge).filter_by(endomondo_id=endomondo_id).one()
-
-        challenge.name = challenge_page.title
-        challenge.start_date = challenge_page.start_date
-        challenge.end_date = challenge_page.end_date
+    def update(self, challenge_page):
+        self.name = challenge_page.title
+        self.start_date = challenge_page.start_date
+        self.end_date = challenge_page.end_date
         self.session.commit()
 
         self.repo_util.save_all(challenge_page.competitors)
-        self.repo_util.save_calories(endomondo_id, challenge_page)
+        self.repo_util.save_calories(self.id, challenge_page)

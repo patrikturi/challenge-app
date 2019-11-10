@@ -9,7 +9,6 @@ class ChallengeTests(DbTestBase):
     def test_update_challengeUpdated(self):
         challenge = self.challenge_without_date
         challenge.repo_util = Mock()
-        remote_id = challenge.endomondo_id
 
         challenge_page = Mock()
         name = 'My Endomondo Challenge!'
@@ -21,7 +20,7 @@ class ChallengeTests(DbTestBase):
 
         challenge_page.competitors = Mock()
 
-        challenge.update(remote_id, challenge_page)
+        challenge.update(challenge_page)
 
         self.session.refresh(challenge)
         self.assertEqual(name, challenge.name)
@@ -29,7 +28,7 @@ class ChallengeTests(DbTestBase):
         self.assertEqual(end_date, challenge.end_date)
 
         challenge.repo_util.save_all.assert_called_once_with(challenge_page.competitors)
-        challenge.repo_util.save_calories.assert_called_once_with(remote_id, challenge_page)
+        challenge.repo_util.save_calories.assert_called_once_with(challenge.id, challenge_page)
 
     def test_getChallengeCalories_mapWithCompetitorEndomondoIdToCaloriesReturned(self):
         competitor1_kcal = 100
