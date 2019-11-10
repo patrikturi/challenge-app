@@ -9,7 +9,7 @@ from server.background_service import BackgroundService
 
 class TestBackgroundService(unittest.TestCase):
 
-    def test_fetch_active_challenges_updateChallengeCalled(self):
+    def test_fetchActiveChallenges_updateChallengeCalled(self):
         current_file_path = os.path.dirname(os.path.abspath(__file__))
         page1_raw = Path(current_file_path, 'resources/challenge_page1.html').read_text(encoding='utf-8')
         challenge_repository = Mock()

@@ -3,8 +3,6 @@ import os
 from flask import Flask
 
 import server.database
-from server.challenge_repository import ChallengeRepository
-from server.competitor_repository import CompetitorRepository
 
 
 def create_app(test_config=None):

@@ -9,3 +9,11 @@ class Calories(AbstractBase):
     competitor_id = Column(Integer, ForeignKey('competitors.id'), nullable=False)
     challenge_id = Column(Integer, ForeignKey('challenges.id'), nullable=False)
     kcal = Column(Integer, nullable=False)
+
+    def save(self):
+        calories = self.session.query(Calories).filter_by(challenge_id=self.challenge_id,
+                                                          competitor_id=self.competitor_id).one_or_none()
+        if calories:
+            calories.kcal = self.kcal
+        else:
+            self.session.add(self)

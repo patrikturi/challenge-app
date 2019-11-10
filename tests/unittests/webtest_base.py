@@ -1,5 +1,5 @@
-from datetime import date
 import unittest
+from datetime import date
 
 from server import create_app
 from server.database import init_db, drop_tables, session

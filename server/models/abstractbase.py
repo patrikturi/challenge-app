@@ -1,4 +1,6 @@
 from sqlalchemy import inspect
+
+from server import database
 from server.database import Base
 
 
@@ -7,6 +9,7 @@ class AbstractBase(Base):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.session = database.session
 
     def asdict(self):
         return {c.key: getattr(self, c.key) for c in inspect(self).mapper.column_attrs}

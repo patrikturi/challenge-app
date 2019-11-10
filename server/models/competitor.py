@@ -11,3 +11,14 @@ class Competitor(AbstractBase):
     name = Column(String)
 
     display_name = Column(String)
+
+    def save(self):
+        stored_competitor = self.session.query(Competitor).filter_by(endomondo_id=self.endomondo_id).first()
+
+        if stored_competitor:
+            self.id = stored_competitor.id
+            self.session.merge(self)
+        else:
+            self.session.add(self)
+
+        self.session.commit()

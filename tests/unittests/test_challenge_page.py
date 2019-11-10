@@ -1,7 +1,7 @@
-import unittest
-from pathlib import Path
 import os
+import unittest
 from datetime import date
+from pathlib import Path
 
 from server.challenge_page import ChallengePage
 from server.models.competitor import Competitor
