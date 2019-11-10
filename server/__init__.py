@@ -25,8 +25,7 @@ def create_app(test_config=None):
     if not os.path.isdir(app.instance_path):
         os.makedirs(app.instance_path)
 
-    from server import views
-
-    app.register_blueprint(views.bp)
+    from server.views import challenge_view
+    challenge_view.register(app)
 
     return app

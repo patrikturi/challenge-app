@@ -1,6 +1,7 @@
 from sqlalchemy import Column, Integer, ForeignKey
 
 from server.models.abstractbase import AbstractBase
+from server.models.competitor import Competitor
 
 
 class Calories(AbstractBase):
