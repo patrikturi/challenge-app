@@ -8,6 +8,14 @@ Endomondo challenges allow users to compete based on calories burnt.
 
 **Endomondo Team Challange** is an unofficial extension to compete in teams, not individually.
 
+## Status
+
+Back-end:
+* Completed: Parsing, storing, retrieving Challenges and Competitors
+* Remaining: Creating, handling Teams
+
+Front-end: not yet started
+
 ## Authors
 
 Ákos Denke: Original idea/prototype
