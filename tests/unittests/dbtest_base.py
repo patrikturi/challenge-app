@@ -25,8 +25,9 @@ class DbTestBase(unittest.TestCase):
         self.challenge_without_date = Challenge(endomondo_id=15)
         self.session.add(self.challenge_without_date)
 
-        self.challenge = Challenge(name='Challenge1', endomondo_id=11112)
-        self.session.add(self.challenge)
+        self.challenge1_endomondo_id = 111112
+        self.challenge1 = Challenge(name='Challenge1', endomondo_id=self.challenge1_endomondo_id)
+        self.session.add(self.challenge1)
 
         self.competitor1_id = 123
         self.competitor1 = Competitor(name='Competitor1', endomondo_id=self.competitor1_id, display_name='Display Name')
@@ -42,6 +43,6 @@ class DbTestBase(unittest.TestCase):
         self.session.close()
 
     def store_calories(self, competitor, kcal):
-        calories = Calories(challenge_id=self.challenge.id, competitor_id=competitor.id, kcal=kcal)
+        calories = Calories(challenge_id=self.challenge1.id, competitor_id=competitor.id, kcal=kcal)
         self.session.add(calories)
         self.session.commit()

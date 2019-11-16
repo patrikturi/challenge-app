@@ -28,4 +28,7 @@ def create_app(test_config=None):
     from server.views import challenge_view
     challenge_view.register(app)
 
+    from server import error_handlers
+    error_handlers.register(app)
+
     return app

@@ -34,6 +34,6 @@ class ChallengeTests(DbTestBase):
         competitor1_kcal = 100
         self.store_calories(self.competitor1, competitor1_kcal)
 
-        calories = self.challenge.get_calories()
+        calories = self.challenge1.get_calories()
 
         self.assertEqual(competitor1_kcal, calories[self.competitor1.id])

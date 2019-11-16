@@ -1,6 +1,8 @@
 from unittest.mock import Mock
 
+from server import errors
 from server.models.calories import Calories
+from server.models.challenge import Challenge
 from server.utils.repository_util import RepositoryUtil
 from tests.unittests.dbtest_base import DbTestBase
 
@@ -28,15 +30,24 @@ class RepositoryUtilTests(DbTestBase):
         comp2.save.assert_called_once()
 
     def test_saveCalories_caloriesStoredToDatabase(self):
-        self.repo_util.save_calories(self.challenge.id, self.page)
+        self.repo_util.save_calories(self.challenge1.id, self.page)
 
-        comp1_calories = self.session.query(Calories).filter_by(competitor_id=self.competitor1.id, challenge_id=self.challenge.id).one()
+        comp1_calories = self.session.query(Calories).filter_by(competitor_id=self.competitor1.id, challenge_id=self.challenge1.id).one()
         self.assertEqual(self.id_to_calories[self.competitor1.id], comp1_calories.kcal)
 
     def test_saveCalories_caloriesKcalUpdated(self):
         self.store_calories(self.competitor1, 5)
 
-        self.repo_util.save_calories(self.challenge.id, self.page)
+        self.repo_util.save_calories(self.challenge1.id, self.page)
 
-        comp1_calories = self.session.query(Calories).filter_by(competitor_id=self.competitor1.id, challenge_id=self.challenge.id).one()
+        comp1_calories = self.session.query(Calories).filter_by(competitor_id=self.competitor1.id, challenge_id=self.challenge1.id).one()
         self.assertEqual(self.competitor1_kcal, comp1_calories.kcal)
+
+    def test_insertChallenge_challengeStoredToDatabase(self):
+        endomondo_id = 1000
+        self.repo_util.insert_challenge(endomondo_id)
+
+        self.session.query(Challenge).filter_by(endomondo_id=endomondo_id).one()
+
+    def test_insertChallengeIdAlreadyExists_userErrorRaised(self):
+        self.assertRaises(errors.UserError, lambda: self.repo_util.insert_challenge(self.challenge1_endomondo_id))

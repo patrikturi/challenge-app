@@ -6,7 +6,7 @@ class TestCalories(DbTestBase):
 
     def test_save_caloriesStoredToDatabase(self):
         kcal = 200
-        challenge_id = self.challenge.id
+        challenge_id = self.challenge1.id
         competitor_id = self.competitor1.id
         new_calories = Calories(challenge_id=challenge_id, competitor_id=competitor_id, kcal=kcal)
 
@@ -22,7 +22,7 @@ class TestCalories(DbTestBase):
 
     def test_save_existingCaloriesUpdated(self):
 
-        challenge_id = self.challenge.id
+        challenge_id = self.challenge1.id
         competitor_id = self.competitor1.id
         calories = Calories(challenge_id=challenge_id, competitor_id=competitor_id, kcal=200)
         self.session.add(calories)
