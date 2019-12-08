@@ -5,6 +5,7 @@ from server import database
 from server.models.calories import Calories
 from server.models.challenge import Challenge
 from server.models.competitor import Competitor
+from server.models.team import Team
 
 
 class DbTestBase(unittest.TestCase):
@@ -35,6 +36,9 @@ class DbTestBase(unittest.TestCase):
         self.competitor2 = Competitor(name='Competitor2', endomondo_id=250)
         self.session.add(self.competitor2)
         self.competitors = [self.competitor1, self.competitor2]
+
+        self.team1 = Team(name='Team1', challenge_id=self.challenge_ended.endomondo_id)
+        self.session.add(self.team1)
 
         self.session.commit()
 

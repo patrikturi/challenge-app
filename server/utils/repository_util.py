@@ -1,5 +1,6 @@
 from server import errors
 from server.models.calories import Calories
+from server.models.team import Team
 
 
 class RepositoryUtil:
@@ -30,3 +31,14 @@ class RepositoryUtil:
         self.session.add(new_challenge)
         self.session.commit()
         return new_challenge
+
+    def insert_team(self, name, challenge_id):
+        team_same_id = self.session.query(Team).filter_by(name=name).one_or_none()
+
+        if team_same_id:
+            raise errors.UserError(f'Team with name {name} already exists.')
+
+        new_team = Team(name=name, challenge_id=challenge_id)
+        self.session.add(new_team)
+        self.session.commit()
+        return new_team

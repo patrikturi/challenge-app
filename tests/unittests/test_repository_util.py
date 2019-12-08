@@ -3,6 +3,7 @@ from unittest.mock import Mock
 from server import errors
 from server.models.calories import Calories
 from server.models.challenge import Challenge
+from server.models.team import Team
 from server.utils.repository_util import RepositoryUtil
 from tests.unittests.dbtest_base import DbTestBase
 
@@ -51,3 +52,12 @@ class RepositoryUtilTests(DbTestBase):
 
     def test_insertChallengeIdAlreadyExists_userErrorRaised(self):
         self.assertRaises(errors.UserError, lambda: self.repo_util.insert_challenge(self.challenge1_endomondo_id))
+
+    def test_insertTeam_teamStoredToDatabase(self):
+        name = 'New Team'
+        self.repo_util.insert_team(name, self.challenge1.id)
+
+        self.session.query(Team).filter_by(name=name).one()
+
+    def test_insertTeamIdAlreadyExists_userErrorRaised(self):
+        self.assertRaises(errors.UserError, lambda: self.repo_util.insert_team('Team1', self.challenge1.id))
