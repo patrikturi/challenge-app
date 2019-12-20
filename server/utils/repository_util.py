@@ -1,5 +1,6 @@
 from server import errors
 from server.models.calories import Calories
+from server.models.membership import Membership
 from server.models.team import Team
 
 
@@ -42,3 +43,18 @@ class RepositoryUtil:
         self.session.add(new_team)
         self.session.commit()
         return new_team
+
+    def insert_team_member(self, team_id, competitor_id):
+        team = self.session.query(Team).filter_by(id=team_id).one()
+
+        cnt = self.session.query(Membership, Team).filter_by(competitor_id=competitor_id).join(Team).filter(Team.challenge_id == team.challenge_id).count()
+        if cnt:
+            raise errors.UserError('Competitor already has a team in this Challenge')
+
+        new_membership = Membership(team_id=team_id, competitor_id=competitor_id)
+        self.session.add(new_membership)
+        self.session.commit()
+        return new_membership
+
+    def get_team_members(self, team_id):
+        return self.session.query(Membership).filter_by(team_id=team_id).all()

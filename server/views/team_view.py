@@ -14,3 +14,8 @@ class TeamView(MethodView):
         team_name = request.json.get('team_name')
 
         repo_util.insert_team(team_name, challenge_id)
+
+
+def register(app_instance):
+    team_view = TeamView.as_view('team_view')
+    app_instance.add_url_rule('/team', view_func=team_view, methods=['GET', 'POST'])

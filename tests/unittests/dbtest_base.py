@@ -39,6 +39,11 @@ class DbTestBase(unittest.TestCase):
 
         self.team1 = Team(name='Team1', challenge_id=self.challenge_ended.endomondo_id)
         self.session.add(self.team1)
+        self.team2 = Team(name='Team2', challenge_id=self.challenge_ended.endomondo_id)
+        self.session.add(self.team2)
+        # Team in another competition
+        self.team1b = Team(name='Team1b', challenge_id=self.challenge_not_started.endomondo_id)
+        self.session.add(self.team1b)
 
         self.session.commit()
 

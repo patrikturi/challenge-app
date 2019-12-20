@@ -27,6 +27,10 @@ def create_app(test_config=None):
 
     from server.views import challenge_view
     challenge_view.register(app)
+    from server.views import team_view
+    team_view.register(app)
+    from server.views import team_member_view
+    team_member_view.register(app)
 
     from server import error_handlers
     error_handlers.register(app)

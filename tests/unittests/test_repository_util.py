@@ -1,8 +1,10 @@
 from unittest.mock import Mock
 
 from server import errors
+from server.errors import UserError
 from server.models.calories import Calories
 from server.models.challenge import Challenge
+from server.models.membership import Membership
 from server.models.team import Team
 from server.utils.repository_util import RepositoryUtil
 from tests.unittests.dbtest_base import DbTestBase
@@ -61,3 +63,27 @@ class RepositoryUtilTests(DbTestBase):
 
     def test_insertTeamIdAlreadyExists_userErrorRaised(self):
         self.assertRaises(errors.UserError, lambda: self.repo_util.insert_team('Team1', self.challenge1.id))
+
+
+    def test_insertTeamMember_teamMemberStoredToDatabase(self):
+
+        self.repo_util.insert_team_member(self.team1.id, self.competitor1.id)
+
+        self.session.query(Membership).filter_by(competitor_id=self.competitor1.id).one()
+
+    def test_insertTeamMember_competitorAlreadyInCompetition_raisesError(self):
+        new_membership = Membership(team_id=self.team2.id, competitor_id=self.competitor1.id)
+        self.session.add(new_membership)
+        self.session.commit()
+        self.session.query(Membership).filter_by(competitor_id=self.competitor1.id).one()
+
+        self.assertRaises(UserError, lambda: self.repo_util.insert_team_member(self.team1.id, self.competitor1.id))
+
+    def test_insertTeamMember_competitorInAnotherCompetition_teamMemberStoredToDatabase(self):
+        new_membership = Membership(team_id=self.team1b.id, competitor_id=self.competitor1.id)
+        self.session.add(new_membership)
+        self.session.commit()
+        self.session.query(Membership).filter_by(competitor_id=self.competitor1.id).one()
+
+        self.repo_util.insert_team_member(self.team1.id, self.competitor1.id)
+        self.session.query(Membership).filter_by(competitor_id=self.competitor1.id).join(Team).filter(Team.challenge_id == self.team1.challenge_id).one()
