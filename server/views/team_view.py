@@ -15,7 +15,10 @@ class TeamView(MethodView):
 
         repo_util.insert_team(team_name, challenge_id)
 
+    def delete(self):
+        team_id = request.json.get('team_id')
+        repo_util.remove_team(team_id)
 
 def register(app_instance):
     team_view = TeamView.as_view('team_view')
-    app_instance.add_url_rule('/team', view_func=team_view, methods=['GET', 'POST'])
+    app_instance.add_url_rule('/team', view_func=team_view, methods=['POST', 'DELETE'])

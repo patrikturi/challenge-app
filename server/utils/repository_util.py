@@ -44,6 +44,11 @@ class RepositoryUtil:
         self.session.commit()
         return new_team
 
+    def remove_team(self, team_id):
+        self.session.query(Membership).filter_by(team_id=team_id).delete()
+        self.session.query(Team).filter_by(id=team_id).delete()
+        self.session.commit()
+
     def insert_team_member(self, team_id, competitor_id):
         team = self.session.query(Team).filter_by(id=team_id).one()
 
@@ -55,6 +60,11 @@ class RepositoryUtil:
         self.session.add(new_membership)
         self.session.commit()
         return new_membership
+
+    def remove_team_member(self, team_id, competitor_id):
+        membership = self.session.query(Membership).filter_by(competitor_id=competitor_id, team_id=team_id).one()
+        self.session.delete(membership)
+        self.session.commit()
 
     def get_team_members(self, team_id):
         return self.session.query(Membership).filter_by(team_id=team_id).all()

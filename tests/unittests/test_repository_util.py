@@ -64,12 +64,28 @@ class RepositoryUtilTests(DbTestBase):
     def test_insertTeamIdAlreadyExists_userErrorRaised(self):
         self.assertRaises(errors.UserError, lambda: self.repo_util.insert_team('Team1', self.challenge1.id))
 
+    def test_removeTeam_teamRemovedFromDatabase(self):
+        team1_id = self.team1.id
+        self.repo_util.remove_team(team1_id)
+        team = self.session.query(Team).filter_by(id=self.team1.id).first()
+        self.assertIsNone(team)
 
     def test_insertTeamMember_teamMemberStoredToDatabase(self):
 
         self.repo_util.insert_team_member(self.team1.id, self.competitor1.id)
-
         self.session.query(Membership).filter_by(competitor_id=self.competitor1.id).one()
+
+    def test_removeTeam_teamWithMembers_teamAndMembersRemovedFromDatabase(self):
+        self.repo_util.insert_team_member(self.team1.id, self.competitor1.id)
+        membership = self.session.query(Membership).filter_by(competitor_id=self.competitor1.id).one()
+
+        team1_id = self.team1.id
+        self.repo_util.remove_team(team1_id)
+        team = self.session.query(Team).filter_by(id=self.team1.id).first()
+        self.assertIsNone(team)
+
+        m = self.session.query(Membership).filter_by(id=membership.id).first()
+        self.assertIsNone(m)
 
     def test_insertTeamMember_competitorAlreadyInCompetition_raisesError(self):
         new_membership = Membership(team_id=self.team2.id, competitor_id=self.competitor1.id)
@@ -87,3 +103,13 @@ class RepositoryUtilTests(DbTestBase):
 
         self.repo_util.insert_team_member(self.team1.id, self.competitor1.id)
         self.session.query(Membership).filter_by(competitor_id=self.competitor1.id).join(Team).filter(Team.challenge_id == self.team1.challenge_id).one()
+
+    def test_removeTeamMember_teamMemberRemovedFromDatabase(self):
+        new_membership = Membership(team_id=self.team1.id, competitor_id=self.competitor1.id)
+        self.session.add(new_membership)
+        self.session.commit()
+        self.session.query(Membership).filter_by(competitor_id=self.competitor1.id).one()
+
+        self.repo_util.remove_team_member(self.team1.id, self.competitor1.id)
+        membership = self.session.query(Membership).filter_by(competitor_id=self.competitor1.id).first()
+        self.assertIsNone(membership)
