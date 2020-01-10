@@ -59,6 +59,7 @@ class RepositoryUtil:
         new_membership = Membership(team_id=team_id, competitor_id=competitor_id)
         self.session.add(new_membership)
         self.session.commit()
+
         return new_membership
 
     def remove_team_member(self, team_id, competitor_id):

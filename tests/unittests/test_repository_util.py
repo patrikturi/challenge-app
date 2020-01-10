@@ -72,7 +72,8 @@ class RepositoryUtilTests(DbTestBase):
 
     def test_insertTeamMember_teamMemberStoredToDatabase(self):
 
-        self.repo_util.insert_team_member(self.team1.id, self.competitor1.id)
+        team_dict = self.repo_util.insert_team_member(self.team1.id, self.competitor1.id)
+        self.assertEqual('TeamA', team_dict[0]['name'])
         self.session.query(Membership).filter_by(competitor_id=self.competitor1.id).one()
 
     def test_removeTeam_teamWithMembers_teamAndMembersRemovedFromDatabase(self):

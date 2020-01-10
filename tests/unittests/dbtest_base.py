@@ -5,6 +5,7 @@ from server import database
 from server.models.calories import Calories
 from server.models.challenge import Challenge
 from server.models.competitor import Competitor
+from server.models.membership import Membership
 from server.models.team import Team
 
 
@@ -46,6 +47,10 @@ class DbTestBase(unittest.TestCase):
         self.session.add(self.team1b)
 
         self.session.commit()
+
+        # competitor2_membership = Membership(team_id=self.team1.id, competitor_id=self.competitor2.id)
+        # self.session.add(competitor2_membership)
+        # self.session.commit()
 
     def tearDown(self):
         database.drop_tables()
