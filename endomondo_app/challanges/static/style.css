@@ -1,3 +1,21 @@
+body {
+    font-family: Roboto,sans-serif;
+    font-size: 1.5rem;
+    color: #666;
+    font-size: 14px;
+}
+
 h1 {
-    color: red;
+    margin-top: 75px;
+}
+
+h2 {
+    font-size: 1.75rem;
+    margin-top: 40px;
+    margin-bottom: 25px;
+    color: black;
+}
+
+.container {
+    max-width: 570px;
 }
