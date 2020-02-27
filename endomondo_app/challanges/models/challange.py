@@ -6,8 +6,11 @@ class Challange(models.Model):
 
     endomondo_id = models.IntegerField()
     title = models.CharField(max_length=200, blank=True)
-    start_date = models.DateTimeField('Start date', null=True)
-    end_date = models.DateTimeField('End date', null=True)
+    start_date = models.DateTimeField('Start date', null=True, blank=True)
+    end_date = models.DateTimeField('End date', null=True, blank=True)
+
+    def to_short_dict(self):
+        return {'id': self.id, 'title': self.title, 'start_date': self.start_date}
 
     # View of the model. Would be better to use eg. restframework but this was the lowest effort
     def to_dict(self):

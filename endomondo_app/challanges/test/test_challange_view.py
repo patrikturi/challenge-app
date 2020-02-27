@@ -5,7 +5,6 @@ class ChallangeViewTests(DatabaseTestCase):
 
     def test_ok(self):
         response = self.client.get('/challange/2/')
-
         self.assertEqual(200, response.status_code)
 
     def test_challange_view(self):
