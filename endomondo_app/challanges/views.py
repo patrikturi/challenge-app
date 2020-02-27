@@ -1,39 +1,14 @@
-from django.shortcuts import render
+from django.template.response import SimpleTemplateResponse
+
+from challanges.models.challange import Challange
 
 
-# Last challange
-def index(request):
-    context = {
-        'name': 'Last Challange Name',
-        'start': None,
-        'end': None,
-        'teams': [
-            {
-                'id': 3,
-                'name': 'TeamA',
-                'calories': 123,
-                'members': [
-                    {
-                        'name': 'Competitor 1',
-                        'calories': 50
-                    },
-                    {
-                        'name': 'Competitor 2',
-                        'calories': 73
-                    }
-                ]
-            },
-            {
-                'id': 5,
-                'name': 'TeamB',
-                'calories': 10,
-                'members': [
-                    {
-                        'name': 'Competitor 3',
-                        'calories': 10
-                    }
-                ]
-            }
-        ]
-    }
-    return render(request, 'index.html', context)
+def last_challange(request):
+    challange: Challange = Challange.objects.all()[1]
+
+    return SimpleTemplateResponse('challange.html', challange.to_dict())
+
+
+def challange_view(request, id):
+    challange: Challange = Challange.objects.get(id=id)
+    return SimpleTemplateResponse('challange.html', challange.to_dict())
