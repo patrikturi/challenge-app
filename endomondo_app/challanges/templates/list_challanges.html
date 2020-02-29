@@ -2,6 +2,27 @@
 
 {% block content %}
 
-<p>{{challanges}}</p>
+<h2>{{title}}</h2>
+
+{% if challanges %}
+<div class='row challanges_header challanges_row'>
+    <div class='col-sm-4'>Title</div>
+    <div class='col-sm-4'>Start Date</div>
+</div>
+{% for ch in challanges %}
+<div class='row challanges_row'>
+    <div class='col-sm-4'><a href='/challange/{{ch.id}}/'>{{ch.title}}</a></div>
+    <div class='col-sm-4'>
+        {% if ch.start_date %}
+            {{ch.start_date|date:"M d, Y"}}
+        {% else %}
+            Unknown
+        {% endif %}
+    </div>
+</div>
+{% endfor %}
+{% else %}
+<p>None available at the moment.</p>
+{% endif %}
 
 {% endblock %}

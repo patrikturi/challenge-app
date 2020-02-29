@@ -24,8 +24,8 @@ class Challange(models.Model):
         team_dicts = []
         for team in teams:
             competitors = Competitor.objects.filter(teams__id=team.id)
-            
-            competitors_list = [model_to_dict(comp) for comp in competitors]
+
+            competitors_list = [comp.to_dict() for comp in competitors]
             team_calories = 0
             for comp in competitors_list:
                 if 'teams' in comp:
@@ -35,7 +35,7 @@ class Challange(models.Model):
                     comp['calories'] = stats.calories
                     team_calories += stats.calories
                 except Stats.DoesNotExist:
-                    pass
+                    comp['calories'] = 0
 
             team_dict = model_to_dict(team)
             

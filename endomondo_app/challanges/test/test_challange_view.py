@@ -43,21 +43,19 @@ class ChallangeViewTests(DatabaseTestCase):
                 'id': 1,
                 'endomondo_id': 10,
                 'name': 'Competitor 1',
-                'display_name': '',
                 'calories': 1001
             },
             {
                 'id': 3,
                 'endomondo_id': 25,
-                'name': 'Competitor 3',
-                'display_name': 'Competitor C',
+                'name': 'Competitor C', # should contain dispaly_name if both name and display_name are provided
                 'calories': 500
             },
             {
                 'id': 4,
                 'endomondo_id': 26,
                 'name': 'Competitor 4',
-                'display_name': ''
+                'calories': 0
             }
         ]
 

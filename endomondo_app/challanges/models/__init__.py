@@ -1,0 +1,1 @@
+from challanges.models.stats import Stats

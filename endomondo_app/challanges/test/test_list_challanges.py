@@ -5,6 +5,13 @@ from challanges.test.helpers import DatabaseTestCase
 from challanges.models.challange import Challange
 
 
+def _get_by_id(challanges, id):
+    for ch in challanges:
+        if ch['id'] == id:
+            return ch
+    return None
+
+
 class ListChallangesTestCase(DatabaseTestCase):
 
     def setUp(self):
@@ -29,7 +36,7 @@ class ListChallangesTestCase(DatabaseTestCase):
 
     def test_challange_short_view(self):
         response = self.client.get('/challanges/')
-        actual_ch = response.context_data['challanges'][0]
+        actual_ch = _get_by_id(response.context_data['challanges'], 1)
         expected_ch = {'id': 1, 'title': 'Challange 0', 'start_date': datetime(2019, 11, 20)}
         self.assertEqual(expected_ch, actual_ch)
 

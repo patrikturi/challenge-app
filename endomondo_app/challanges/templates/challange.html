@@ -2,24 +2,50 @@
 
 {% block content %}
 
-<h2>{{title}}</h3>
+<h2>Challange: {{title}}</h2>
+<div class="row row-challange-header">
+    <div class='col-sm-4'>
+        <a href='https://www.endomondo.com/challenges/{{endomondo_id}}'>Endomondo link</a>
+    </div>
+    <div class='col-sm-4'>
+        Start date: {% if start_date %} {{start_date|date:"M d, Y"}} {% else %} Unknown {% endif %}
+    </div>
+    <div class='col-sm-4'>
+        End date: {% if end_date %} {{end_date|date:"M d, Y"}} {% else %} Unknown {% endif %}
+    </div>
+</div>
 <div class="row">
     <div class="col-sm accordion" id="accordionExample">
         {% for team in teams %}
-            <div class="card">
-                <div class="card-header" id="heading{{team.id}}">
+            <div class="card team-card">
+                <div class="card-header team-card-header" id="heading{{team.id}}">
                 <div class="mb-0">
-                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse{{team.id}}" aria-expanded="true" aria-controls="collapse{{team.id}}">
-                    {{team.name}} | {{team.calories}}
+                    <button class="team-header-cell btn btn-link btn-show-team" type="button" data-toggle="collapse" data-target="#collapse{{team.id}}" aria-expanded="true" aria-controls="collapse{{team.id}}">
+                    {{team.name}}
                     </button>
-                </div>
+                </div><div class="team-header-cell team-card-calories">{{team.calories}} kcal</div>
                 </div>
             
                 <div id="collapse{{team.id}}" class="collapse" aria-labelledby="heading{{team.id}}" data-parent="#accordionExample">
                 <div class="card-body">
+                    <table class="table">
+                        <tbody>
                     {% for competitor in team.members %}
-                        <div>{{competitor.name}} | {{competitor.calories}}</div>
+                            <tr>
+                                <td class='competitor-name'>
+                                    <a href='https://www.endomondo.com/profile/{{competitor.endomondo_id}}'>
+                                    {% if competitor.name %}
+                                        {{competitor.name}}
+                                    {% else %}
+                                        ?
+                                    {% endif %}
+                                    </a>
+                                </td>
+                                <td>{{competitor.calories}} kcal</td>
+                            </tr>
                     {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
                 </div>
             </div>
