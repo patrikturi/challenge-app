@@ -1,3 +1,5 @@
+from django.http import HttpResponseNotFound
+
 from challanges.test.helpers import DatabaseTestCase
 
 
@@ -18,14 +20,14 @@ class ChallangeViewTests(DatabaseTestCase):
             'end_date': self.ch1_end
         }
 
-        challange = response.context_data
+        challange = response.context_data['challange']
         del challange['teams']
         self.assertEqual(expected_challange, challange)
 
     def test_team_view(self):
         response = self.client.get('/challange/2/')
 
-        team = response.context_data['teams'][0]
+        team = response.context_data['challange']['teams'][0]
         del team['members']
 
         expected_team = {
@@ -61,7 +63,7 @@ class ChallangeViewTests(DatabaseTestCase):
 
         response = self.client.get('/challange/2/')
 
-        team = response.context_data['teams'][0]
+        team = response.context_data['challange']['teams'][0]
         members = team['members']
         self.assertEqual(expected_members, members)
 
@@ -69,7 +71,11 @@ class ChallangeViewTests(DatabaseTestCase):
 
         response = self.client.get('/challange/2/')
 
-        challange = response.context_data
+        challange = response.context_data['challange']
         self.assertEqual('Challange 1', challange['title'])
         teams = [team['name'] for team in challange['teams']]
         self.assertEqual(['Team A', 'Team B'], teams)
+
+    def test_challange_does_not_exist(self):
+        response = self.client.get('/challange/1000/')
+        self.assertTrue(isinstance(response, HttpResponseNotFound))

@@ -20,13 +20,13 @@ class LastChallangeTests(DatabaseTestCase):
 
     def test_last_challange(self):
         response = self.client.get('/')
-        challange = response.context_data
+        challange = response.context_data['challange']
         self.assertEqual(3, challange['id'])
 
     def test_all_ended(self):
         self.datetime_mock.now.return_value = datetime(2020, 10, 1)
         response = self.client.get('/')
-        challange = response.context_data
+        challange = response.context_data['challange']
         self.assertEqual(2, challange['id'])
 
     def test_all_ended_one_upcoming(self):
@@ -36,7 +36,7 @@ class LastChallangeTests(DatabaseTestCase):
 
         response = self.client.get('/')
 
-        challange = response.context_data
+        challange = response.context_data['challange']
         self.assertEqual(2, challange['id'])
 
     def test_null_start_date(self):
@@ -45,7 +45,7 @@ class LastChallangeTests(DatabaseTestCase):
 
         response = self.client.get('/')
 
-        challange = response.context_data
+        challange = response.context_data['challange']
         self.assertEqual(3, challange['id'])
 
     def test_all_ended_one_null(self):
@@ -55,5 +55,5 @@ class LastChallangeTests(DatabaseTestCase):
 
         response = self.client.get('/')
 
-        challange = response.context_data
+        challange = response.context_data['challange']
         self.assertEqual(5, challange['id'])
