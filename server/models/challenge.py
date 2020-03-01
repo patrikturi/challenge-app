@@ -29,5 +29,6 @@ class Challenge(AbstractBase):
         self.end_date = challenge_page.end_date
         self.session.commit()
 
+        # TODO: already exists?
         self.repo_util.save_all(challenge_page.competitors)
         self.repo_util.save_calories(self.id, challenge_page)

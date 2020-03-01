@@ -15,7 +15,9 @@ jobs:
   - bash: |
       cd endomondo_app
       pip3 install -r requirements.txt
+      export PYTHONPATH=$(pwd)
       python3 manage.py test
+      python challanges/integrationtest/test_endomondo_api.py
     displayName: 'Tests'
     env:
       ENDOMONDO_USER_PASSWORD: $(ENDOMONDO_USER_PASSWORD)
