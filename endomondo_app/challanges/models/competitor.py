@@ -8,8 +8,8 @@ class Competitor(models.Model):
 
     endomondo_id = models.IntegerField()
     name = models.CharField(max_length=100, blank=True)
-    display_name = models.CharField(max_length=100, blank=True)
-    teams = models.ManyToManyField(Team)
+    display_name = models.CharField(max_length=100, blank=True, help_text='Optional, name will be parsed form endomondo.com if not specified')
+    teams = models.ManyToManyField(Team, blank=True)
 
     def to_dict(self):
         self_dict = model_to_dict(self)
