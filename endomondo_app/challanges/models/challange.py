@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Q
 from django.forms.models import model_to_dict
 
 
@@ -20,29 +21,7 @@ class Challange(models.Model):
         from challanges.models.stats import Stats
 
         teams = Team.objects.filter(challange=self)
-
-        team_dicts = []
-        for team in teams:
-            competitors = Competitor.objects.filter(teams__id=team.id)
-
-            competitors_list = [comp.to_dict() for comp in competitors]
-            team_calories = 0
-            for comp in competitors_list:
-                if 'teams' in comp:
-                    del comp['teams']
-                try:
-                    stats = Stats.objects.get(challange__id=self.id, competitor__id=comp['id'])
-                    comp['calories'] = stats.calories
-                    team_calories += stats.calories
-                except Stats.DoesNotExist:
-                    comp['calories'] = 0
-
-            team_dict = model_to_dict(team)
-            
-            team_dict['members'] = competitors_list
-            team_dict['calories'] = team_calories
-
-            team_dicts.append(team_dict)
+        team_dicts = [team.to_dict() for team in teams]
 
         challange_dict = model_to_dict(self)
         challange_dict['teams'] = team_dicts
@@ -51,3 +30,19 @@ class Challange(models.Model):
     def __str__(self):
         name = '"{}"'.format(self.title) if self.title else self.endomondo_id
         return 'Challange {}'.format(name)
+
+    @classmethod
+    def get_last(cls, now):
+        active_challanges = Challange.objects.filter( \
+            Q(start_date__lt=now, end_date__gt=now) | Q(start_date__isnull=True)) \
+            .order_by('-start_date')
+
+        if len(active_challanges) > 0:
+            challange = active_challanges[0]
+        else:
+            challanges_ended = Challange.objects.filter(end_date__lt=now).order_by('-end_date')
+            if len(challanges_ended) > 0:
+                challange = challanges_ended[0]
+            else:
+                challange = None
+        return challange

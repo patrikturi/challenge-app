@@ -11,11 +11,22 @@ class Competitor(models.Model):
     display_name = models.CharField(max_length=100, blank=True, help_text='Optional, name will be parsed form endomondo.com if not specified')
     teams = models.ManyToManyField(Team, blank=True)
 
-    def to_dict(self):
+    def to_dict(self, challange_id):
+        from challanges.models.stats import Stats
+
         self_dict = model_to_dict(self)
         if self.display_name:
             self_dict['name'] = self.display_name
+
         del self_dict['display_name']
+        del self_dict['teams']
+
+        try:
+            stats = Stats.objects.get(challange__id=challange_id, competitor__id=self.id)
+            self_dict['calories'] = stats.calories
+        except Stats.DoesNotExist:
+            self_dict['calories'] = 0
+
         return self_dict
 
     def __str__(self):

@@ -19,18 +19,7 @@ def _get_challange_view(challange_dict):
 
 def last_challange(request):
     now = datetime.now()
-    active_challanges = Challange.objects.filter( \
-        Q(start_date__lt=now, end_date__gt=now) | Q(start_date__isnull=True)) \
-        .order_by('-start_date')
-
-    if len(active_challanges) > 0:
-        challange = active_challanges[0]
-    else:
-        challanges_ended = Challange.objects.filter(end_date__lt=datetime.now()).order_by('-end_date')
-        if len(challanges_ended) > 0:
-            challange = challanges_ended[0]
-        else:
-            challange = None
+    challange = Challange.get_last(now)
 
     challange_dict = challange.to_dict() if challange else {}
 
