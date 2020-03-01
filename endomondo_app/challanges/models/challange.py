@@ -47,3 +47,7 @@ class Challange(models.Model):
         challange_dict = model_to_dict(self)
         challange_dict['teams'] = team_dicts
         return challange_dict
+
+    def __str__(self):
+        name = '"{}"'.format(self.title) if self.title else self.endomondo_id
+        return 'Challange {}'.format(name)

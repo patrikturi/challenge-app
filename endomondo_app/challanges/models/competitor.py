@@ -17,3 +17,12 @@ class Competitor(models.Model):
             self_dict['name'] = self.display_name
         del self_dict['display_name']
         return self_dict
+
+    def __str__(self):
+        if self.display_name:
+            name = '"{}"'.format(self.display_name)
+        elif self.name:
+            name = '"{}"'.format(self.name)
+        else:
+            name = self.endomondo_id
+        return 'Competitor {}'.format(name)

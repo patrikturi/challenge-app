@@ -6,3 +6,6 @@ class Team(models.Model):
 
     name = models.CharField(max_length=100)
     challange = models.ForeignKey(Challange, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return 'Team "{}"'.format(self.name)
