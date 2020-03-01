@@ -6,7 +6,8 @@ body {
 }
 
 .container {
-    max-width: 570px;
+    max-width: 576px;
+    padding-bottom: 120px;
 }
 
 .nav-item {
@@ -23,8 +24,6 @@ h2 {
     margin-bottom: 25px;
     color: black;
 }
-
-
 
 
 .challanges_header {

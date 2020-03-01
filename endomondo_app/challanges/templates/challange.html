@@ -3,20 +3,21 @@
 {% block content %}
 
 <h2>{{title}}</h2>
+{% with ch=challange %}
 <div class="row row-challange-header">
     <div class='col-sm-4'>
         <a href='https://www.endomondo.com/challenges/{{endomondo_id}}'>Endomondo link</a>
     </div>
     <div class='col-sm-4'>
-        Start: {% if start_date %} {{start_date|date:"M d, Y"}} {% else %} Unknown {% endif %}
+        Start: {% if ch.start_date %} {{ch.start_date|date:"M d, Y"}} {% else %} Unknown {% endif %}
     </div>
     <div class='col-sm-4'>
-        End: {% if end_date %} {{end_date|date:"M d, Y"}} {% else %} Unknown {% endif %}
+        End: {% if ch.end_date %} {{ch.end_date|date:"M d, Y"}} {% else %} Unknown {% endif %}
     </div>
 </div>
 <div class="row">
     <div class="col-sm accordion" id="accordionExample">
-        {% for team in teams %}
+        {% for team in ch.teams %}
             <div class="card team-card">
                 <div class="card-header team-card-header" id="heading{{team.id}}">
                 <div class="mb-0">
@@ -52,5 +53,5 @@
         {% endfor %}
     </div>
 </div>
-
+{% endwith %}
 {% endblock %}
