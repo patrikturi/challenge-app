@@ -2,7 +2,7 @@ from datetime import datetime
 
 from bs4 import BeautifulSoup
 
-# from server.models.competitor import Competitor
+from challanges.models.competitor import Competitor
 
 
 class ChallengePage:
@@ -10,8 +10,6 @@ class ChallengePage:
 
     def __init__(self, html_string):
         self.soup = BeautifulSoup(html_string, 'html.parser')
-        # Competitor endomondo id to kcal
-        self.calories = {}
 
     @property
     def next_page_url(self):
@@ -27,20 +25,18 @@ class ChallengePage:
         # exmaple: "Challenge Title! - 2019 | Most calories (All sports) Challenge | Endomondo"
         return title_element.text.split(' | ')[0].strip()
 
-    # @property
-    # def competitors(self):
-    #     elements = self.soup.find_all('a', class_='name')
-    #     competitors = []
-    #     for element in elements:
-    #         name = element.text
-    #         id = int(element['href'].split('/')[-1])
-    #         competitors.append(Competitor(name=name, endomondo_id=id))
-    #         calories = self._parse_calories(id)
-    #         self.calories[id] = calories
-    #     return competitors
-
-    def get_calories(self, competitor_id):
-        return self.calories[competitor_id]
+    @property
+    def competitors(self):
+        elements = self.soup.find_all('a', class_='name')
+        competitors = []
+        for element in elements:
+            id = int(element['href'].split('/')[-1])
+            competitors.append({
+                'name': element.text,
+                'endomondo_id': id,
+                'calories': self._parse_calories(id)
+            })
+        return competitors
 
     @property
     def start_date(self):
