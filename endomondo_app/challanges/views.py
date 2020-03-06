@@ -38,7 +38,7 @@ def challange_view(request, id):
 
 
 def all_challanges(request):
-    challanges = Challange.objects.all().order_by('-start_date')
+    challanges = Challange.objects.order_by('-start_date')
     challanges_view = _challanges_to_short_dict(challanges)
     challanges_view['title'] = 'All Challanges'
     challanges_view['page_name'] = 'All'

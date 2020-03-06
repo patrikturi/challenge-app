@@ -5,7 +5,7 @@ from django.forms.models import model_to_dict
 
 class Challange(models.Model):
 
-    endomondo_id = models.IntegerField()
+    endomondo_id = models.IntegerField(unique=True)
     title = models.CharField(max_length=200, blank=True)
     start_date = models.DateTimeField('Start date', null=True, blank=True)
     end_date = models.DateTimeField('End date', null=True, blank=True)
@@ -22,7 +22,7 @@ class Challange(models.Model):
 
         teams = Team.objects.filter(challange=self)
         team_dicts = [team.to_dict() for team in teams]
-
+ 
         challange_dict = model_to_dict(self)
         challange_dict['teams'] = team_dicts
         return challange_dict
@@ -46,3 +46,23 @@ class Challange(models.Model):
             else:
                 challange = None
         return challange
+
+    def update(self, challenge_page):
+        from challanges.models.competitor import Competitor
+        from challanges.models.stats import Stats
+
+        self.title = challenge_page.name
+        self.start_date = challenge_page.start_date
+        self.end_date = challenge_page.end_date
+        self.save(force_update=True)
+
+        for comp_dict in challenge_page.competitors:
+            endomondo_id = comp_dict['endomondo_id']
+
+            comptetitor = Competitor.get_or_create(endomondo_id)
+            comptetitor.name = comp_dict['name']
+            comptetitor.save()
+
+            stats = Stats.get_or_create(challenge=self, competitor=comptetitor)
+            stats.calories = comp_dict['calories']
+            stats.save()

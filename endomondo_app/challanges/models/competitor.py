@@ -6,7 +6,7 @@ from challanges.models.team import Team
 
 class Competitor(models.Model):
 
-    endomondo_id = models.IntegerField()
+    endomondo_id = models.IntegerField(unique=True)
     name = models.CharField(max_length=100, blank=True)
     display_name = models.CharField(max_length=100, blank=True, help_text='Optional, name will be parsed form endomondo.com if not specified')
     teams = models.ManyToManyField(Team, blank=True)
@@ -37,3 +37,10 @@ class Competitor(models.Model):
         else:
             name = self.endomondo_id
         return 'Competitor {}'.format(name)
+
+    @classmethod
+    def get_or_create(cls, endomondo_id):
+        try:
+            return Competitor.objects.get(endomondo_id=endomondo_id)
+        except Competitor.DoesNotExist:
+            return Competitor(endomondo_id=endomondo_id)
