@@ -1,3 +1,5 @@
+from datetime import datetime, timedelta
+
 from django.db import models
 from django.db.models import Q
 from django.forms.models import model_to_dict
@@ -66,3 +68,11 @@ class Challange(models.Model):
             stats = Stats.get_or_create(challenge=self, competitor=comptetitor)
             stats.calories = comp_dict['calories']
             stats.save()
+
+    @classmethod
+    def get_non_final(cls):
+        """These challanges will be updated from endomondo.com"""
+        # Upcoming or Ongoing or Completed just lately
+        end = datetime.now() - timedelta(days=1)
+        challanges = Challange.objects.filter(Q(end_date__gt=end) | Q(end_date__isnull=True)).order_by('-start_date')
+        return challanges

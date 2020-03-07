@@ -26,6 +26,9 @@ class ListChallangesTestCase(DatabaseTestCase):
         datetime_patch = patch('challanges.views.datetime')
         self.datetime_mock = datetime_patch.start()
         self.datetime_mock.now.return_value = datetime(2020, 2, 25)
+        datetime2_patch = patch('challanges.models.challange.datetime')
+        self.datetime2_mock = datetime2_patch.start()
+        self.datetime2_mock.now.return_value = datetime(2020, 2, 25)
 
     def test_all_challanges(self):
         response = self.client.get('/challanges/')
@@ -53,3 +56,16 @@ class ListChallangesTestCase(DatabaseTestCase):
         self.assertEqual(200, response.status_code)
         ids = [ch['id'] for ch in response.context_data['challanges']]
         self.assertEqual({5, 7}, set(ids))
+
+    def test_non_final_challenges(self):
+        ch = Challange(title='Challange Recently Ended', endomondo_id=30, start_date=datetime(2020, 2, 1), end_date=datetime(2020, 2, 24, hour=12))
+        ch.save()
+
+        challenges = Challange.get_non_final()
+
+        eids = set(ch.endomondo_id for ch in challenges)
+        # 5, 6: ongoing
+        # 12: upcoming
+        # 14: no date
+        # 30: recendly ended
+        self.assertEqual({5, 6, 12, 14, 30}, eids)
