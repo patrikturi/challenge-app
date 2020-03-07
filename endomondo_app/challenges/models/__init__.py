@@ -1,0 +1,1 @@
+from challenges.models.stats import Stats

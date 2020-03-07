@@ -4,14 +4,14 @@
 
 <h2>{{title}}</h2>
 
-{% if challanges %}
-<div class='row challanges_header challanges_row'>
+{% if challenges %}
+<div class='row challenges_header challenges_row'>
     <div class='col-sm-4'>Title</div>
     <div class='col-sm-4'>Start Date</div>
 </div>
-{% for ch in challanges %}
-<div class='row challanges_row'>
-    <div class='col-sm-4'><a href='/challange/{{ch.id}}/'>{{ch.title}}</a></div>
+{% for ch in challenges %}
+<div class='row challenges_row'>
+    <div class='col-sm-4'><a href='/challenge/{{ch.id}}/'>{{ch.title}}</a></div>
     <div class='col-sm-4'>
         {% if ch.start_date %}
             {{ch.start_date|date:"M d, Y"}}

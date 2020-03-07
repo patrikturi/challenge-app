@@ -2,7 +2,7 @@ from datetime import datetime
 
 from bs4 import BeautifulSoup
 
-from challanges.models.competitor import Competitor
+from challenges.models.competitor import Competitor
 
 
 class ChallengePage:

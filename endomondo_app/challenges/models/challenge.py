@@ -5,7 +5,7 @@ from django.db.models import Q
 from django.forms.models import model_to_dict
 
 
-class Challange(models.Model):
+class Challenge(models.Model):
 
     endomondo_id = models.IntegerField(unique=True)
     title = models.CharField(max_length=200, blank=True)
@@ -18,40 +18,40 @@ class Challange(models.Model):
     # View of the model. Would be better to use eg. restframework but this was the lowest effort
     def to_dict(self):
         # Avoids circular imports
-        from challanges.models.team import Team
-        from challanges.models.competitor import Competitor
-        from challanges.models.stats import Stats
+        from challenges.models.team import Team
+        from challenges.models.competitor import Competitor
+        from challenges.models.stats import Stats
 
-        teams = Team.objects.filter(challange=self)
+        teams = Team.objects.filter(challenge=self)
         team_dicts = [team.to_dict() for team in teams]
  
-        challange_dict = model_to_dict(self)
-        challange_dict['teams'] = team_dicts
-        return challange_dict
+        challenge_dict = model_to_dict(self)
+        challenge_dict['teams'] = team_dicts
+        return challenge_dict
 
     def __str__(self):
         name = '"{}"'.format(self.title) if self.title else self.endomondo_id
-        return 'Challange {}'.format(name)
+        return 'Challenge {}'.format(name)
 
     @classmethod
     def get_last(cls, now):
-        active_challanges = Challange.objects.filter( \
+        active_challenges = Challenge.objects.filter( \
             Q(start_date__lt=now, end_date__gt=now) | Q(start_date__isnull=True)) \
             .order_by('-start_date')
 
-        if len(active_challanges) > 0:
-            challange = active_challanges[0]
+        if len(active_challenges) > 0:
+            challenge = active_challenges[0]
         else:
-            challanges_ended = Challange.objects.filter(end_date__lt=now).order_by('-end_date')
-            if len(challanges_ended) > 0:
-                challange = challanges_ended[0]
+            challenges_ended = Challenge.objects.filter(end_date__lt=now).order_by('-end_date')
+            if len(challenges_ended) > 0:
+                challenge = challenges_ended[0]
             else:
-                challange = None
-        return challange
+                challenge = None
+        return challenge
 
     def update(self, challenge_page):
-        from challanges.models.competitor import Competitor
-        from challanges.models.stats import Stats
+        from challenges.models.competitor import Competitor
+        from challenges.models.stats import Stats
 
         self.title = challenge_page.name
         self.start_date = challenge_page.start_date
@@ -71,8 +71,8 @@ class Challange(models.Model):
 
     @classmethod
     def get_non_final(cls):
-        """These challanges will be updated from endomondo.com"""
+        """These challenges will be updated from endomondo.com"""
         # Upcoming or Ongoing or Completed just lately
         end = datetime.now() - timedelta(days=1)
-        challanges = Challange.objects.filter(Q(end_date__gt=end) | Q(end_date__isnull=True)).order_by('-start_date')
-        return challanges
+        challenges = Challenge.objects.filter(Q(end_date__gt=end) | Q(end_date__isnull=True)).order_by('-start_date')
+        return challenges

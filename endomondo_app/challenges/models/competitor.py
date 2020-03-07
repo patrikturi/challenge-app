@@ -1,7 +1,7 @@
 from django.db import models
 from django.forms.models import model_to_dict
 
-from challanges.models.team import Team
+from challenges.models.team import Team
 
 
 class Competitor(models.Model):
@@ -11,8 +11,8 @@ class Competitor(models.Model):
     display_name = models.CharField(max_length=100, blank=True, help_text='Optional, name will be parsed form endomondo.com if not specified')
     teams = models.ManyToManyField(Team, blank=True)
 
-    def to_dict(self, challange_id):
-        from challanges.models.stats import Stats
+    def to_dict(self, challenge_id):
+        from challenges.models.stats import Stats
 
         self_dict = model_to_dict(self)
         if self.display_name:
@@ -22,7 +22,7 @@ class Competitor(models.Model):
         del self_dict['teams']
 
         try:
-            stats = Stats.objects.get(challange__id=challange_id, competitor__id=self.id)
+            stats = Stats.objects.get(challenge__id=challenge_id, competitor__id=self.id)
             self_dict['calories'] = stats.calories
         except Stats.DoesNotExist:
             self_dict['calories'] = 0

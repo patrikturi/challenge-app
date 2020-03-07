@@ -11,7 +11,7 @@
     </head>
     <body>
         <div class='container'>
-            <h1 class='text-success'>Endomondo Team Challange</h1>
+            <h1 class='text-success'>Endomondo Team Challenge</h1>
             <nav class="navbar navbar-expand-sm navbar-light bg-light">
                 <a class="navbar-brand" href="#"><img src="{% static 'img/logo.png' %}" width=40 height=40/> Endomondo</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -23,10 +23,10 @@
                         <a class="nav-link" href="/">Home</a>
                       </li>
                       <li class="nav-item{% if page_name == 'Upcoming' %} active{% endif %}">
-                        <a class="nav-link" href="/challanges/upcoming/">Upcoming</a>
+                        <a class="nav-link" href="/challenges/upcoming/">Upcoming</a>
                       </li>
                       <li class="nav-item{% if page_name == 'Completed' %} active{% endif %}">
-                        <a class="nav-link" href="/challanges/ended/">Completed</a>
+                        <a class="nav-link" href="/challenges/ended/">Completed</a>
                       </li>
                     </ul>
                 </div>

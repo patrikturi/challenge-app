@@ -2,16 +2,16 @@ from datetime import datetime
 from django.test import TestCase
 from unittest.mock import Mock
 
-from challanges.models.challange import Challange
-from challanges.models.competitor import Competitor
-from challanges.models.stats import Stats
+from challenges.models.challenge import Challenge
+from challenges.models.competitor import Competitor
+from challenges.models.stats import Stats
 
 
 class ChallengeTests(TestCase):
 
     def setUp(self):
         super().setUp()
-        challenge = Challange(endomondo_id=10)
+        challenge = Challenge(endomondo_id=10)
         self.challenge = challenge
         challenge.save()
  
@@ -25,12 +25,12 @@ class ChallengeTests(TestCase):
         challenge_page.start_date = self.start_date
         challenge_page.competitors = []
 
-    def test_update_challange_details(self):
+    def test_update_challenge_details(self):
         challenge = self.challenge
 
         challenge.update(self.challenge_page)
 
-        challenge = Challange.objects.get(endomondo_id=10)
+        challenge = Challenge.objects.get(endomondo_id=10)
         self.assertEqual(self.challenge_title, challenge.title)
         self.assertEqual(self.start_date, challenge.start_date)
         self.assertEqual(self.end_date, challenge.end_date)
@@ -46,7 +46,7 @@ class ChallengeTests(TestCase):
         comp1_orig = Competitor(endomondo_id=comp1_eid, name='Name1', display_name=orig_display_name)
         comp1_orig.save()
 
-        stats1_orig = Stats(challange=challenge, competitor=comp1_orig, calories=2)
+        stats1_orig = Stats(challenge=challenge, competitor=comp1_orig, calories=2)
         stats1_orig.save()
 
         page_comp1 = {'name': 'New Name', 'endomondo_id': comp1_eid, 'calories': 100}
@@ -57,8 +57,8 @@ class ChallengeTests(TestCase):
         # THEN
         comp1 = Competitor.objects.get(endomondo_id=comp1_eid)
         comp2 = Competitor.objects.get(endomondo_id=comp2_eid)
-        stats1 = Stats.objects.get(challange=challenge, competitor=comp1)
-        stats2 = Stats.objects.get(challange=challenge, competitor=comp2)
+        stats1 = Stats.objects.get(challenge=challenge, competitor=comp1)
+        stats2 = Stats.objects.get(challenge=challenge, competitor=comp2)
 
         self.assertEqual(page_comp1['name'], comp1.name)
         self.assertEqual(orig_display_name, comp1.display_name)

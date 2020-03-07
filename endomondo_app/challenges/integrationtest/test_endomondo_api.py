@@ -1,7 +1,7 @@
 import os
 import time
 
-from challanges.endomondo.api import EndomondoApi
+from challenges.endomondo.api import EndomondoApi
 
 
 def test_getPage_fetchesChallengePage():
