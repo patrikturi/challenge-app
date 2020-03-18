@@ -122,3 +122,6 @@ STATIC_URL = '/static/'
 
 mimetypes.add_type("text/css", ".css", True)
 
+
+ENDOMONDO_USERNAME = os.environ['ENDOMONDO_USER']
+ENDOMONDO_PASSWORD = os.environ['ENDOMONDO_PASSWORD']

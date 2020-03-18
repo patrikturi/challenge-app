@@ -6,7 +6,7 @@
 {% with ch=challenge %}
 <div class="row row-challenge-header">
     <div class='col-sm-4'>
-        <a href='https://www.endomondo.com/challenges/{{endomondo_id}}'>Endomondo link</a>
+        <a href='https://www.endomondo.com/challenges/{{ch.endomondo_id}}'>Endomondo link</a>
     </div>
     <div class='col-sm-4'>
         Start: {% if ch.start_date %} {{ch.start_date|date:"M d, Y"}} {% else %} Unknown {% endif %}

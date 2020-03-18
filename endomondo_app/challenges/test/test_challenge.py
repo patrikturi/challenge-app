@@ -20,7 +20,7 @@ class ChallengeTests(TestCase):
         self.challenge_title = 'My Endomondo Challenge!'
         self.start_date = datetime(2019, 10, 20)
         self.end_date = datetime(2020, 1, 22)
-        challenge_page.name = self.challenge_title
+        challenge_page.title = self.challenge_title
         challenge_page.end_date = self.end_date
         challenge_page.start_date = self.start_date
         challenge_page.competitors = []

@@ -5,9 +5,9 @@ from challenges.endomondo.api import EndomondoApi
 
 
 def test_getPage_fetchesChallengePage():
-    username = 'mentor.endomondo@gmail.com'
     url = 'https://www.endomondo.com/challenges/41375412'
-    password = os.environ['ENDOMONDO_USER_PASSWORD']
+    username = os.environ['ENDOMONDO_USER']
+    password = os.environ['ENDOMONDO_PASSWORD']
 
     api = EndomondoApi()
     api.login(username, password)

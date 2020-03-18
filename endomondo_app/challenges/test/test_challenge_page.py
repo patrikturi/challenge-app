@@ -21,7 +21,7 @@ class ChallengePageTests(unittest.TestCase):
         cls.invalid_calories_page = ChallengePage(invalid_calories_raw)
 
     def test_page1_hasNextPage(self):
-        self.assertEqual('/?x=-next-page-url', self.page1.next_page_url)
+        self.assertEqual('https://endomondo.com/?x=-next-page-url', self.page1.next_page_url)
 
     def test_page1_hasNoPrevPage(self):
         self.assertEqual(None, self.page1.prev_page_url)
@@ -30,7 +30,7 @@ class ChallengePageTests(unittest.TestCase):
         self.assertEqual(None, self.page2.next_page_url)
 
     def test_page2_hasPrevPage(self):
-        self.assertEqual('/?x=-prev-page-url', self.page2.prev_page_url)
+        self.assertEqual('https://endomondo.com/?x=-prev-page-url', self.page2.prev_page_url)
 
     def test_page1_title(self):
         self.assertEqual('Challenge Title! - 2019', self.page1.title)

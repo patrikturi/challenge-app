@@ -30,7 +30,10 @@ class ChallengePage:
         elements = self.soup.find_all('a', class_='name')
         competitors = []
         for element in elements:
-            id = int(element['href'].split('/')[-1])
+            href = element['href']
+            if href == '#':
+                continue # "You" - this is the bot
+            id = int(href.split('/')[-1])
             competitors.append({
                 'name': element.text,
                 'endomondo_id': id,
@@ -60,7 +63,7 @@ class ChallengePage:
             return None
         url = anchors[0]['href']
         # Remove the initial '..' from the relative url
-        return url[2:]
+        return 'https://endomondo.com' + url[2:]
 
     def _get_profile_anchor(self, anchors, id):
         for a in anchors:

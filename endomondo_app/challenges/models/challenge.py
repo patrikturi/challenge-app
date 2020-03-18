@@ -53,7 +53,7 @@ class Challenge(models.Model):
         from challenges.models.competitor import Competitor
         from challenges.models.stats import Stats
 
-        self.title = challenge_page.name
+        self.title = challenge_page.title
         self.start_date = challenge_page.start_date
         self.end_date = challenge_page.end_date
         self.save(force_update=True)
