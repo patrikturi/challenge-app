@@ -3,6 +3,8 @@ from collections import Counter
 from django import forms
 from django.contrib import admin
 from django.core.exceptions import ValidationError
+from django.utils.safestring import mark_safe
+from django.db.models import Q 
 
 from challenges.models.challenge import Challenge
 from challenges.models.team import Team
@@ -10,7 +12,24 @@ from challenges.models.competitor import Competitor
 
 
 class ChallengeAdmin(admin.ModelAdmin):
-    fields = ('endomondo_id',)
+    fields = ('endomondo_id', 'endomondo_link', 'site_link', 'competitors_without_team')
+    readonly_fields = ('endomondo_link', 'site_link', 'competitors_without_team', )
+
+    def endomondo_link(self, obj):
+        return mark_safe('<a href="https://www.endomondo.com/challenges/{}">Endomondo link</a>'.format(obj.endomondo_id))
+
+    def site_link(self, obj):
+        return mark_safe('<a href="/challenge/{}/">Site link</a>'.format(obj.id))
+
+    def competitors_without_team(self, obj):
+        # Has Stats in Ch but no Team in Ch
+        comps = Competitor.objects.filter(~Q(teams__challenge=obj) & Q(stats__challenge=obj))
+        comp_entries = []
+        for comp in comps:
+            entry = '<div><a href="/admin/challenges/competitor/{id}/change/">{name}</a></div>'.format(id=comp.id, name=str(comp))
+            comp_entries.append(entry)
+        html = ''.join(comp_entries) if comp_entries else '-'
+        return mark_safe(html)
 
 
 class CompetitorForm(forms.ModelForm):
@@ -39,8 +58,12 @@ class CompetitorForm(forms.ModelForm):
 
 
 class CompetitorAdmin(admin.ModelAdmin):
-    fields = ('endomondo_id', 'display_name', 'teams')
+    fields = ('display_name', 'teams')
     form = CompetitorForm
+
+    # Competitors are parsed/created from Endomondo, it is not needed to create them manually
+    def has_add_permission(self, request, obj=None):
+        return False
 
 
 admin.site.register(Challenge, ChallengeAdmin)
