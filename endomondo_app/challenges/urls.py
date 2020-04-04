@@ -1,6 +1,7 @@
 from django.urls import path
 
 from . import views
+from . import tasks
 
 urlpatterns = [
     path('', views.last_challenge),
@@ -8,4 +9,5 @@ urlpatterns = [
     path('challenges/', views.all_challenges),
     path('challenges/upcoming/', views.upcoming_challenges),
     path('challenges/ended/', views.ended_challenges),
+    path('fetch/', tasks.fetch_challenges)
 ]

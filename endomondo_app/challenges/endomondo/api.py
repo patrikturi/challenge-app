@@ -1,7 +1,7 @@
 import requests
 
 ENDOMONDO_URL = 'https://www.endomondo.com'
-
+ENDOMONDO_LOGIN_URL = ENDOMONDO_URL + '/rest/session'
 
 # Currently Endomondo REST API does not exist for Challenges
 # so the necessary http requests have been reverse engineered
@@ -13,21 +13,25 @@ class EndomondoApi:
         self.headers = {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.90 Safari/537.36'
         }
-        self.session = None
-
-    def login(self, username, password):
-        assert self.session is None, 'Already logged in'
         self.session = requests.Session()
 
-        # Initial request to acquire CSRF token
+    def login(self, username, password):
+        # Check if logged in, acquire CSRF token
+        if 'x-csrf-token' in self.headers:
+            resp = self.session.get(ENDOMONDO_LOGIN_URL, headers=self.headers)
+            if resp.ok:
+                # Already logged in
+                print('Already logged in')
+                return
+
         resp = self.session.get(ENDOMONDO_URL, headers=self.headers)
         resp.raise_for_status()
-
         self.headers['x-csrf-token'] = self.session.cookies['CSRF_TOKEN']
+        print('Log in')
 
         # Post login data
-        data = {'email': username, 'password': password, 'remember': False}
-        resp = self.session.post(ENDOMONDO_URL + '/rest/session', headers=self.headers, json=data)
+        data = {'email': username, 'password': password}
+        resp = self.session.post(ENDOMONDO_LOGIN_URL, headers=self.headers, json=data)
         resp.raise_for_status()
 
     def get_page(self, url):

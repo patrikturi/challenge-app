@@ -10,6 +10,7 @@
     <div class='col-sm-6'>Start Date</div>
 </div>
 {% for ch in challenges %}
+{% if ch.title %}
 <div class='row challenges_row'>
     <div class='col-sm-6'><a href='/challenge/{{ch.id}}/'>{{ch.title}}</a></div>
     <div class='col-sm-6'>
@@ -20,6 +21,7 @@
         {% endif %}
     </div>
 </div>
+{% endif %}
 {% endfor %}
 {% else %}
 <p>None available at the moment.</p>
