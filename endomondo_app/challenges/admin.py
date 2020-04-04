@@ -12,8 +12,8 @@ from challenges.models.competitor import Competitor
 
 
 class ChallengeAdmin(admin.ModelAdmin):
-    fields = ('endomondo_id', 'endomondo_link', 'site_link', 'competitors_without_team')
-    readonly_fields = ('endomondo_link', 'site_link', 'competitors_without_team', )
+    fields = ('endomondo_id', 'endomondo_link', 'site_link', 'competitors_without_team', 'status')
+    readonly_fields = ('endomondo_link', 'site_link', 'competitors_without_team', 'status' )
 
     def endomondo_link(self, obj):
         return mark_safe('<a href="https://www.endomondo.com/challenges/{}">Endomondo link</a>'.format(obj.endomondo_id))
@@ -31,6 +31,10 @@ class ChallengeAdmin(admin.ModelAdmin):
         html = ''.join(comp_entries) if comp_entries else '-'
         return mark_safe(html)
 
+    def status(self, obj):
+        status_class = ' style="color:red"' if obj.parse_error else ''
+        html = '<span{}>{}</span>'.format(status_class, obj.status_text)
+        return mark_safe(html)
 
 class CompetitorForm(forms.ModelForm):
 

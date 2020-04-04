@@ -11,6 +11,9 @@ class Challenge(models.Model):
     title = models.CharField(max_length=200, blank=True)
     start_date = models.DateTimeField('Start date', null=True, blank=True)
     end_date = models.DateTimeField('End date', null=True, blank=True)
+    parse_error = models.BooleanField(null=True)
+    status_text = models.CharField(max_length=200, default='-')
+    parse_date = models.DateTimeField('Parse date', null=True, blank=True)
 
     def to_short_dict(self):
         return {'id': self.id, 'title': self.title, 'start_date': self.start_date}
@@ -19,8 +22,6 @@ class Challenge(models.Model):
     def to_dict(self):
         # Avoids circular imports
         from challenges.models.team import Team
-        from challenges.models.competitor import Competitor
-        from challenges.models.stats import Stats
 
         teams = Team.objects.filter(challenge=self)
         team_dicts = [team.to_dict() for team in teams]
@@ -56,6 +57,9 @@ class Challenge(models.Model):
         self.title = challenge_page.title
         self.start_date = challenge_page.start_date
         self.end_date = challenge_page.end_date
+        self.parse_error = False
+        self.status_text = 'OK'
+        self.parse_date = datetime.now()
         self.save(force_update=True)
 
         for comp_dict in challenge_page.competitors:

@@ -13,8 +13,6 @@ api = EndomondoApi()
 def process_page(api, ch, url):
     # TODO catch invalid challenge id
     html = api.get_page(url)
-    with open('out.html', 'w') as file:
-        file.write(html)
     page = ChallengePage(html)
     ch.update(page)
     return page
@@ -33,7 +31,9 @@ def fetch_challenges(request):
             orig_page = process_page(api, ch, url)
         except HTTPError as e:
             if e.response.status_code == 404:
-                print('404')
+                ch.parse_error = True
+                ch.status_text = 'NOT FOUND'
+                ch.save()
             else:
                 raise e
         else:
@@ -46,4 +46,4 @@ def fetch_challenges(request):
             while next_url is not None:
                 page = process_page(api, ch, next_url)
                 prev_url = page.prev_page_url
-        return HttpResponse()
+    return HttpResponse()

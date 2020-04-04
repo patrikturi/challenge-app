@@ -15,7 +15,7 @@
         End: {% if ch.end_date %} {{ch.end_date|date:"M d, Y"}} {% else %} Unknown {% endif %}
     </div>
 </div>
-<div class="row">
+<div class="row challenge-body">
     <div class="col-sm accordion" id="accordionExample">
         {% for team in ch.teams %}
             <div class="card team-card">
@@ -53,5 +53,6 @@
         {% endfor %}
     </div>
 </div>
+{% if ch.parse_date %}<div class='challenge-footer'>Updated: {{ch.parse_date|date:"M d, Y"}}</div>{% endif %}
 {% endwith %}
 {% endblock %}

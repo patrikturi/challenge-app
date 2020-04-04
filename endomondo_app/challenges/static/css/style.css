@@ -1,4 +1,9 @@
+html {
+    height:100%;
+}
+
 body {
+    height:100%;
     font-family: Roboto,sans-serif;
     font-size: 1.5rem;
     color: #666;
@@ -92,4 +97,8 @@ h2 {
 .team-header-cell {
     min-width: 50%;
     display: inline-block;
+}
+
+.challenge-body {
+    margin-bottom: 10px;
 }

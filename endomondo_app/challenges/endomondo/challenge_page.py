@@ -2,8 +2,6 @@ from datetime import datetime
 
 from bs4 import BeautifulSoup
 
-from challenges.models.competitor import Competitor
-
 
 class ChallengePage:
     """Single page of a Challenge on endomondo.com"""
