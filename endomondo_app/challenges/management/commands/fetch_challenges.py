@@ -1,0 +1,53 @@
+from requests import HTTPError
+
+from challenges.models.challenge import Challenge
+from challenges.endomondo.api import EndomondoApi
+from challenges.endomondo.challenge_page import ChallengePage
+from mysite import settings
+from django.http import HttpResponse
+
+
+from django.core.management.base import BaseCommand
+
+
+class Command(BaseCommand):
+    help = 'Fetches active challenges from endomondo.com'
+
+    def handle(self, *args, **options):
+        api = EndomondoApi()
+
+        challenges = Challenge.objects.all()  # Challenge.get_non_final()
+
+        if challenges:
+            api.login(settings.ENDOMONDO_USERNAME, settings.ENDOMONDO_PASSWORD)
+
+        for ch in challenges:
+            orig_page = None
+            try:
+                print('Updating challenge: {}'.format(ch.endomondo_id))
+                url = 'https://www.endomondo.com/challenges/{}'.format(ch.endomondo_id)
+                orig_page = process_page(api, ch, url)
+            except HTTPError as e:
+                if e.response.status_code == 404:
+                    ch.parse_error = True
+                    ch.status_text = 'NOT FOUND'
+                    ch.save()
+                else:
+                    raise e
+            else:
+                prev_url = orig_page.prev_page_url
+                while prev_url is not None:
+                    page = process_page(api, ch, prev_url)
+                    prev_url = page.prev_page_url
+
+                next_url = orig_page.next_page_url
+                while next_url is not None:
+                    page = process_page(api, ch, next_url)
+                    prev_url = page.prev_page_url
+
+
+def process_page(api, ch, url):
+    html = api.get_page(url)
+    page = ChallengePage(html)
+    ch.update(page)
+    return page
