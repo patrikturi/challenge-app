@@ -53,6 +53,6 @@
         {% endfor %}
     </div>
 </div>
-{% if ch.parse_date %}<div class='challenge-footer'>Updated: {{ch.parse_date|date:"M d, Y"}}</div>{% endif %}
+{% if ch.parse_date %}<div class='challenge-footer'>Updated: {{ch.parse_date|date:"M d, Y H:m"}}</div>{% endif %}
 {% endwith %}
 {% endblock %}

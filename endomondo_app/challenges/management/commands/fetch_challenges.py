@@ -16,7 +16,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         api = EndomondoApi()
 
-        challenges = Challenge.objects.all()  # Challenge.get_non_final()
+        challenges = Challenge.get_non_final()
 
         if challenges:
             api.login(settings.ENDOMONDO_USERNAME, settings.ENDOMONDO_PASSWORD)
@@ -43,7 +43,7 @@ class Command(BaseCommand):
                 next_url = orig_page.next_page_url
                 while next_url is not None:
                     page = process_page(api, ch, next_url)
-                    prev_url = page.prev_page_url
+                    next_url = page.next_page_url
 
 
 def process_page(api, ch, url):
