@@ -1,4 +1,6 @@
 import requests
+from challenges.loggers import fetch_logger
+
 
 ENDOMONDO_URL = 'https://www.endomondo.com'
 ENDOMONDO_LOGIN_URL = ENDOMONDO_URL + '/rest/session'
@@ -9,7 +11,7 @@ ENDOMONDO_LOGIN_URL = ENDOMONDO_URL + '/rest/session'
 class EndomondoApi:
 
     def __init__(self):
-        # We get would 403 Forbidden response without specifying a real User-Agent
+        # We get 403 Forbidden response without specifying a real User-Agent
         self.headers = {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.90 Safari/537.36'
         }
@@ -21,13 +23,13 @@ class EndomondoApi:
             resp = self.session.get(ENDOMONDO_LOGIN_URL, headers=self.headers)
             if resp.ok:
                 # Already logged in
-                print('Already logged in')
+                fetch_logger.info('Already logged in')
                 return
 
         resp = self.session.get(ENDOMONDO_URL, headers=self.headers)
         resp.raise_for_status()
         self.headers['x-csrf-token'] = self.session.cookies['CSRF_TOKEN']
-        print('Log in')
+        fetch_logger.info('Logging in')
 
         # Post login data
         data = {'email': username, 'password': password}
@@ -38,6 +40,7 @@ class EndomondoApi:
         domain_name = 'endomondo.com'
         if not domain_name in url.lower():
             raise ValueError(f'Invalid URL "{url}", the url must be on {domain_name}')
+        fetch_logger.info(f'Getting page {url}')
         resp = self.session.get(url, headers=self.headers)
         resp.raise_for_status()
         return resp.text

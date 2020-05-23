@@ -123,5 +123,37 @@ STATIC_URL = '/static/'
 mimetypes.add_type("text/css", ".css", True)
 
 
+LOGS_DIR = os.path.join(BASE_DIR, 'mysite', 'logs')
+if not os.path.isdir(LOGS_DIR):
+    os.mkdir(LOGS_DIR)
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'standard': {
+            'format': '%(asctime)s [%(levelname)s] %(name)s: %(message)s'
+        },
+    },
+    'handlers': {
+        'fetch_handler': {
+            'level': 'DEBUG',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(LOGS_DIR, 'fetch.log'),
+            'maxBytes': 1024*1024*2,
+            'backupCount': 3,
+            'formatter':'standard',
+        },
+    },
+    'loggers': {
+        'fetch': {
+            'handlers': ['fetch_handler'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}
+
+
 ENDOMONDO_USERNAME = os.environ['ENDOMONDO_USER']
 ENDOMONDO_PASSWORD = os.environ['ENDOMONDO_PASSWORD']
