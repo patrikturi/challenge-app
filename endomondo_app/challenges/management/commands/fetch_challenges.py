@@ -46,6 +46,8 @@ class Command(BaseCommand):
                     page = process_page(api, ch, next_url)
                     next_url = page.next_page_url
 
+        fetch_logger.info('Completed')
+
 
 def process_page(api, ch, url):
     html = api.get_page(url)
