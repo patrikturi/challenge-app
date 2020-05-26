@@ -2,7 +2,7 @@ from requests import HTTPError
 from challenges.models.challenge import Challenge
 from challenges.endomondo.api import EndomondoApi
 from challenges.endomondo.challenge_page import ChallengePage
-from mysite import settings
+from django.conf import settings
 from django.http import HttpResponse
 from django.core.management.base import BaseCommand
 

@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  app:
+    build: .
+    volumes:
+      - ./mysite/db:/endomondo_app/mysite/db
+      - ./mysite/logs:/endomondo_app/mysite/logs
+    ports:
+      - "80:80"
+    restart: always
+    env_file:
+      - .env
+  cron:
+    build: .
+    command: ["cron", "-f"]
+    volumes:
+        - ./mysite/db:/endomondo_app/mysite/db
+        - ./mysite/logs:/endomondo_app/mysite/logs
+    restart: always
+    env_file:
+        - .env

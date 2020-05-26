@@ -1,5 +1,6 @@
-db.sqlite3
+mysite/db/
 virtualenv/
 *.pyc
 env.sh
 mysite/logs/
+.env

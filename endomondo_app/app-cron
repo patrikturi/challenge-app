@@ -1,0 +1,1 @@
+*/15 * * * * root /endomondo_app/manage.py fetch_challenges

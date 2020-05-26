@@ -1,0 +1,17 @@
+FROM python:3.8.3-slim
+
+WORKDIR /endomondo_app
+
+RUN apt-get update && apt-get -y install cron
+COPY app-cron /etc/cron.d/app-cron
+RUN chmod 0644 /etc/cron.d/app-cron
+RUN crontab /etc/cron.d/app-cron
+
+COPY . .
+RUN chmod 0744 manage.py
+
+RUN pip install -r requirements.txt
+
+ENV DJANGO_SETTINGS_MODULE=mysite.settings.production
+
+CMD ["gunicorn", "mysite.wsgi", "--bind", "0.0.0.0:80", "-w", "4"]
