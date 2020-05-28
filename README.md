@@ -19,7 +19,7 @@ ENDOMONDO_PASSWORD=
 SECRET_KEY=
 SENTRY_DSN=
 ```
-ENDOMONDO_USER & PASSWORD: login credentials to endomondo.com. SECRET_KEY: generate a key [here](https://miniwebtool.com/django-secret-key-generator/) and copy it. SENTRY_DSN: copy it from sentry.io -> Settings -> Client Keys (DSN) -> DSN - it is a special link to the sentry server.
+ENDOMONDO_USER & PASSWORD: login credentials to endomondo.com. SECRET_KEY: generate a key [here](https://miniwebtool.com/django-secret-key-generator/) and copy it. SENTRY_DSN: copy it from https://sentry.io -> Settings -> Client Keys (DSN) -> DSN - it is a special link to the sentry server.
 * Install `docker` and `docker-compose`
 * Execute:
 ```
@@ -28,14 +28,14 @@ sudo su
 ./restart.sh
 ```
 * http://localhost should be up and running
-* Check `./projects/logs/` and sentry.io if the fetcher has any errors
+* Check `./projects/logs/` and https://sentry.io if the fetcher has any errors
 
 ## Administration
 
 * Create new admin user:
 `sudo docker exec -it <container id> /endomondo_app/manage.py createsuperuser`
 * Log in at https://localhost/admin
-* Follow admin guide: TODO
+* Follow admin guide [here](docs/admin-guide.md)
 
 ## Updating deployment to new version
 
