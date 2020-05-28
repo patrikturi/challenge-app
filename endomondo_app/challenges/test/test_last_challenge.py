@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date, datetime
 from unittest.mock import patch
 
 from challenges.test.helpers import DatabaseTestCase
@@ -9,10 +9,10 @@ class LastChallengeTests(DatabaseTestCase):
 
     def setUp(self):
         super().setUp()
-        datetime_patch = patch('challenges.views.datetime')
-        self.datetime_mock = datetime_patch.start()
+        datetime_patch = patch('challenges.views.timezone')
+        self.timezone_mock = datetime_patch.start()
         # Both Challenge 2 and 3 are ongoing
-        self.datetime_mock.now.return_value = datetime(2020, 2, 25)
+        self.timezone_mock.now.return_value = datetime(2020, 2, 25)
 
     def test_ok(self):
         response = self.client.get('/')
@@ -24,15 +24,15 @@ class LastChallengeTests(DatabaseTestCase):
         self.assertEqual(3, challenge['id'])
 
     def test_all_ended(self):
-        self.datetime_mock.now.return_value = datetime(2020, 10, 1)
+        self.timezone_mock.now.return_value = datetime(2020, 10, 1)
         response = self.client.get('/')
         challenge = response.context_data['challenge']
         self.assertEqual(2, challenge['id'])
 
     def test_all_ended_one_upcoming(self):
-        ch4 = Challenge(title='Challenge 4', endomondo_id=12, start_date=datetime(2021, 1, 1), end_date=datetime(2021, 1, 30))
+        ch4 = Challenge(title='Challenge 4', endomondo_id=12, start_date=date(2021, 1, 1), end_date=date(2021, 1, 30))
         ch4.save()
-        self.datetime_mock.now.return_value = datetime(2020, 10, 1)
+        self.timezone_mock.now.return_value = datetime(2020, 10, 1)
 
         response = self.client.get('/')
 
@@ -51,7 +51,7 @@ class LastChallengeTests(DatabaseTestCase):
     def test_all_ended_one_null(self):
         ch4 = Challenge(title='Challenge 4', endomondo_id=12)
         ch4.save()
-        self.datetime_mock.now.return_value = datetime(2020, 10, 1)
+        self.timezone_mock.now.return_value = datetime(2020, 10, 1)
 
         response = self.client.get('/')
 

@@ -1,7 +1,6 @@
-from datetime import datetime
-
 from django.db.models import Q
 from django.http import Http404
+from django.utils import timezone
 from django.template.response import SimpleTemplateResponse
 
 from challenges.models.challenge import Challenge
@@ -20,7 +19,7 @@ def _get_challenge_view(challenge_dict):
 
 
 def last_challenge(request):
-    now = datetime.now()
+    now = timezone.now()
     challenge = Challenge.get_last(now)
 
     challenge_dict = challenge.to_dict() if challenge else {}
@@ -49,7 +48,7 @@ def all_challenges(request):
 
 def upcoming_challenges(request):
     challenges = Challenge.objects.filter( \
-        Q(start_date__gt=datetime.now()) | Q(start_date__isnull=True)).order_by('start_date')
+        Q(start_date__gt=timezone.now()) | Q(start_date__isnull=True)).order_by('start_date')
     challenges_view = _challenges_to_short_dict(challenges)
     challenges_view['title'] = 'Upcoming Challenges'
     challenges_view['page_name'] = 'Upcoming'
@@ -57,7 +56,7 @@ def upcoming_challenges(request):
 
 
 def ended_challenges(request):
-    challenges = Challenge.objects.filter(end_date__lt=datetime.now()).order_by('-start_date')
+    challenges = Challenge.objects.filter(end_date__lt=timezone.now()).order_by('-start_date')
     challenges_view = _challenges_to_short_dict(challenges)
     challenges_view['title'] = 'Completed Challenges'
     challenges_view['page_name'] = 'Completed'

@@ -1,16 +1,17 @@
-from datetime import datetime, timedelta
+from datetime import timedelta
 
 from django.db import models
 from django.db.models import Q
 from django.forms.models import model_to_dict
+from django.utils import timezone
 
 
 class Challenge(models.Model):
 
     endomondo_id = models.IntegerField(unique=True)
     title = models.CharField(max_length=200, blank=True)
-    start_date = models.DateTimeField('Start date', null=True, blank=True)
-    end_date = models.DateTimeField('End date', null=True, blank=True)
+    start_date = models.DateField('Start date', null=True, blank=True)
+    end_date = models.DateField('End date', null=True, blank=True)
     parse_error = models.BooleanField(null=True)
     status_text = models.CharField(max_length=200, default='-')
     parse_date = models.DateTimeField('Parse date', null=True, blank=True)
@@ -59,7 +60,7 @@ class Challenge(models.Model):
         self.end_date = challenge_page.end_date
         self.parse_error = False
         self.status_text = 'OK'
-        self.parse_date = datetime.now()
+        self.parse_date = timezone.now()
         self.save(force_update=True)
 
         for comp_dict in challenge_page.competitors:
@@ -77,6 +78,6 @@ class Challenge(models.Model):
     def get_non_final(cls):
         """These challenges will be updated from endomondo.com"""
         # Upcoming or Ongoing or Completed just lately
-        end = datetime.now() - timedelta(days=1)
+        end = timezone.now() - timedelta(days=1)
         challenges = Challenge.objects.filter(Q(end_date__gt=end) | Q(end_date__isnull=True)).order_by('-start_date')
         return challenges

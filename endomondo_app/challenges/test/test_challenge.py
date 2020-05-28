@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date
 from django.test import TestCase
 from unittest.mock import Mock
 
@@ -18,8 +18,8 @@ class ChallengeTests(TestCase):
         challenge_page = Mock()
         self.challenge_page = challenge_page
         self.challenge_title = 'My Endomondo Challenge!'
-        self.start_date = datetime(2019, 10, 20)
-        self.end_date = datetime(2020, 1, 22)
+        self.start_date = date(2019, 10, 20)
+        self.end_date = date(2020, 1, 22)
         challenge_page.title = self.challenge_title
         challenge_page.end_date = self.end_date
         challenge_page.start_date = self.start_date

@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date, datetime
 from unittest.mock import patch
 
 from challenges.test.helpers import DatabaseTestCase
@@ -16,19 +16,19 @@ class ListChallengesTestCase(DatabaseTestCase):
 
     def setUp(self):
         super().setUp()
-        ch4 = Challenge(title='Challenge 4', endomondo_id=12, start_date=datetime(2020, 6, 1), end_date=datetime(2020, 6, 30))
-        ch5 = Challenge(title='Challenge 5', endomondo_id=13, start_date=datetime(2018, 1, 1), end_date=datetime(2018, 1, 30))
+        ch4 = Challenge(title='Challenge 4', endomondo_id=12, start_date=date(2020, 6, 1), end_date=date(2020, 6, 30))
+        ch5 = Challenge(title='Challenge 5', endomondo_id=13, start_date=date(2018, 1, 1), end_date=date(2018, 1, 30))
         ch6 = Challenge(title='Challenge 6', endomondo_id=14)
         ch4.save()
         ch5.save()
         ch6.save()
 
-        datetime_patch = patch('challenges.views.datetime')
-        self.datetime_mock = datetime_patch.start()
-        self.datetime_mock.now.return_value = datetime(2020, 2, 25)
-        datetime2_patch = patch('challenges.models.challenge.datetime')
-        self.datetime2_mock = datetime2_patch.start()
-        self.datetime2_mock.now.return_value = datetime(2020, 2, 25)
+        datetime_patch = patch('challenges.views.timezone')
+        self.timezone_mock = datetime_patch.start()
+        self.timezone_mock.now.return_value = datetime(2020, 2, 25)
+        datetime2_patch = patch('challenges.models.challenge.timezone')
+        self.timezone2_mock = datetime2_patch.start()
+        self.timezone2_mock.now.return_value = datetime(2020, 2, 25)
 
     def test_all_challenges(self):
         response = self.client.get('/challenges/')
@@ -40,7 +40,7 @@ class ListChallengesTestCase(DatabaseTestCase):
     def test_challenge_short_view(self):
         response = self.client.get('/challenges/')
         actual_ch = _get_by_id(response.context_data['challenges'], 1)
-        expected_ch = {'id': 1, 'title': 'Challenge 0', 'start_date': datetime(2019, 11, 20)}
+        expected_ch = {'id': 1, 'title': 'Challenge 0', 'start_date': date(2019, 11, 20)}
         self.assertEqual(expected_ch, actual_ch)
 
     def test_ended_challenges(self):
@@ -58,7 +58,7 @@ class ListChallengesTestCase(DatabaseTestCase):
         self.assertEqual({5, 7}, set(ids))
 
     def test_non_final_challenges(self):
-        ch = Challenge(title='Challenge Recently Ended', endomondo_id=30, start_date=datetime(2020, 2, 1), end_date=datetime(2020, 2, 24, hour=12))
+        ch = Challenge(title='Challenge Recently Ended', endomondo_id=30, start_date=date(2020, 2, 1), end_date=date(2020, 2, 25))
         ch.save()
 
         challenges = Challenge.get_non_final()

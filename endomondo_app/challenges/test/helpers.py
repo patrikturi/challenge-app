@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date
 
 from django.test import TestCase
 
@@ -10,12 +10,12 @@ from challenges.models.stats import Stats
 
 class DatabaseTestCase(TestCase):
     def setUp(self):
-        self.ch1_start = datetime(2020, 2, 1)
-        self.ch1_end = datetime(2020, 3, 15)
-        ch0 = Challenge(title='Challenge 0', endomondo_id=4, start_date=datetime(2019, 11, 20), end_date=datetime(2019, 11, 25))
+        self.ch1_start = date(2020, 2, 1)
+        self.ch1_end = date(2020, 3, 15)
+        ch0 = Challenge(title='Challenge 0', endomondo_id=4, start_date=date(2019, 11, 20), end_date=date(2019, 11, 25))
         ch1 = Challenge(title='Challenge 1', endomondo_id=5, start_date=self.ch1_start, end_date=self.ch1_end)
-        ch2 = Challenge(title='Challenge 2', endomondo_id=6, start_date=datetime(2020, 2, 10), end_date=datetime(2020, 2, 29))
-        ch3 = Challenge(title='Challenge 3', endomondo_id=2, start_date=datetime(2019, 6, 1), end_date=datetime(2019, 6, 30))
+        ch2 = Challenge(title='Challenge 2', endomondo_id=6, start_date=date(2020, 2, 10), end_date=date(2020, 2, 29))
+        ch3 = Challenge(title='Challenge 3', endomondo_id=2, start_date=date(2019, 6, 1), end_date=date(2019, 6, 30))
         ch0.save()
         ch1.save()
         ch2.save()
