@@ -1,7 +1,6 @@
 project/db/
 virtualenv/
 *.pyc
-env.sh
 project/logs/
 .env
 project/static/
