@@ -15,6 +15,6 @@ RUN chmod 0744 manage.py
 
 RUN pip install -r requirements.txt
 
-ENV DJANGO_SETTINGS_MODULE=mysite.settings.production
+ENV DJANGO_SETTINGS_MODULE=project.settings.production
 
-CMD ["gunicorn", "mysite.wsgi", "--bind", "0.0.0.0:80", "-w", "4"]
+CMD ["gunicorn", "project.wsgi", "--bind", "0.0.0.0:80", "-w", "4"]

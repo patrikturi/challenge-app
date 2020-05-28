@@ -1,4 +1,4 @@
-from mysite.settings.common import *
+from project.settings.common import *
 
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration

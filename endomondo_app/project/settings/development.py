@@ -1,4 +1,4 @@
-from mysite.settings.common import *
+from project.settings.common import *
 
 
 DEBUG = True

@@ -1,6 +1,6 @@
-mysite/db/
+project/db/
 virtualenv/
 *.pyc
 env.sh
-mysite/logs/
+project/logs/
 .env
