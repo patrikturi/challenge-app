@@ -12,7 +12,7 @@ class Challenge(models.Model):
     title = models.CharField(max_length=200, blank=True)
     start_date = models.DateField('Start date', null=True, blank=True)
     end_date = models.DateField('End date', null=True, blank=True)
-    parse_error = models.BooleanField(null=True)
+    parse_error = models.NullBooleanField()
     status_text = models.CharField(max_length=200, default='-')
     parse_date = models.DateTimeField('Parse date', null=True, blank=True)
 
