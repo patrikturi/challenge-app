@@ -26,6 +26,7 @@ class Challenge(models.Model):
 
         teams = Team.objects.filter(challenge=self)
         team_dicts = [team.to_dict() for team in teams]
+        team_dicts.sort(key=lambda team: team['calories'], reverse=True)
  
         challenge_dict = model_to_dict(self)
         challenge_dict['teams'] = team_dicts

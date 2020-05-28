@@ -17,6 +17,19 @@
 </div>
 <div class="row challenge-body">
     <div class="col-sm accordion" id="accordionExample">
+        {% if not ch.teams %}
+            <div class="card team-card">
+                <div class="card-header team-card-header" id="heading0">
+                    <div class="mb-0">
+                        <button class="team-header-cell btn btn-link btn-show-team" type="button">
+                            <a href="/admin">
+                                No teams yet. Create them on the admin site >
+                            </a>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
         {% for team in ch.teams %}
             <div class="card team-card">
                 <div class="card-header team-card-header" id="heading{{team.id}}">
