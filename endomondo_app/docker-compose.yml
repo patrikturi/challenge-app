@@ -13,7 +13,7 @@ services:
       - .env
   cron:
     build: .
-    command: ["cron", "-f"]
+    command: ["/cron_entrypoint.sh"]
     volumes:
         - ./mysite/db:/endomondo_app/mysite/db
         - ./mysite/logs:/endomondo_app/mysite/logs

@@ -7,6 +7,9 @@ COPY app-cron /etc/cron.d/app-cron
 RUN chmod 0644 /etc/cron.d/app-cron
 RUN crontab /etc/cron.d/app-cron
 
+COPY ./cron_entrypoint.sh /cron_entrypoint.sh
+RUN chmod +x /cron_entrypoint.sh
+
 COPY . .
 RUN chmod 0744 manage.py
 
