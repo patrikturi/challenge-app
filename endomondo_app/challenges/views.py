@@ -13,7 +13,7 @@ def _challenges_to_short_dict(challenges):
 def _get_challenge_view(challenge_dict):
     if not challenge_dict:
         return {}
-    title = 'Challenge: {}'.format(challenge_dict['title']) if challenge_dict['title'] else 'Challenge'
+    title = challenge_dict['title'] if challenge_dict['title'] else 'Challenge'
     view = {'title': title, 'page_name': 'Home', 'challenge': challenge_dict}
     return view
 
