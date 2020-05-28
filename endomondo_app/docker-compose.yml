@@ -3,6 +3,7 @@ version: '3'
 services:
   app:
     build: .
+    command: ["/app_entrypoint.sh"]
     volumes:
       - ./project/db:/endomondo_app/project/db
       - ./project/logs:/endomondo_app/project/logs

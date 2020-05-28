@@ -9,6 +9,8 @@ RUN crontab /etc/cron.d/app-cron
 
 COPY ./cron_entrypoint.sh /cron_entrypoint.sh
 RUN chmod +x /cron_entrypoint.sh
+COPY ./app_entrypoint.sh /app_entrypoint.sh
+RUN chmod +x /app_entrypoint.sh
 
 COPY . .
 RUN chmod 0744 manage.py
@@ -16,5 +18,3 @@ RUN chmod 0744 manage.py
 RUN pip install -r requirements.txt
 
 ENV DJANGO_SETTINGS_MODULE=project.settings.production
-
-CMD ["gunicorn", "project.wsgi", "--bind", "0.0.0.0:80", "-w", "4"]

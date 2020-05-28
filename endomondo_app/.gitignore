@@ -4,3 +4,4 @@ virtualenv/
 env.sh
 project/logs/
 .env
+project/static/

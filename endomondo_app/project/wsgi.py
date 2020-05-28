@@ -16,4 +16,4 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'project.settings.production')
 
 application = get_wsgi_application()
 application = WhiteNoise(application)
-application.add_files('./challenges/static', prefix='static')
+application.add_files('./project/static', prefix='static')
