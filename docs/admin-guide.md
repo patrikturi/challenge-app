@@ -37,3 +37,7 @@
 14. Click **VIEW SITE** in the top right corner to go to the public site and check the results.
 
 ![View site](img/view-site.png)
+
+## Notes
+
+* After a challenge finished, it will be updated for one more day. After that it will not update anymore.
