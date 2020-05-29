@@ -33,7 +33,10 @@ sudo su
 ## Administration
 
 * Create new admin user:
-`sudo docker exec -it <container id> /endomondo_app/manage.py createsuperuser`
+```
+sudo docker ps
+sudo docker exec -it <container id> /endomondo_app/manage.py createsuperuser
+```
 * Log in at https://localhost/admin
 * Follow admin guide [here](docs/admin-guide.md)
 
