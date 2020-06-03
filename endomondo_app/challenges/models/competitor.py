@@ -27,6 +27,7 @@ class Competitor(models.Model):
         except Stats.DoesNotExist:
             self_dict['calories'] = 0
 
+        self_dict['endomondo_id'] = str(self.endomondo_id)
         return self_dict
 
     def __str__(self):
