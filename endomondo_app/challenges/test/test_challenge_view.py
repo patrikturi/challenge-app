@@ -39,26 +39,26 @@ class ChallengeViewTests(DatabaseTestCase):
             'challenge': 2,
             'calories': 1501,
         }
-        
+
         self.assertEqual(expected_team, team)
 
     def test_team_members(self):
         expected_members = [
             {
                 'id': 1,
-                'endomondo_id': 10,
+                'endomondo_id': '10',
                 'name': 'Competitor 1',
                 'calories': 1001
             },
             {
                 'id': 3,
-                'endomondo_id': 25,
+                'endomondo_id': '25',
                 'name': 'Competitor C', # should contain dispaly_name if both name and display_name are provided
                 'calories': 500
             },
             {
                 'id': 4,
-                'endomondo_id': 26,
+                'endomondo_id': '26',
                 'name': 'Competitor 4',
                 'calories': 0
             }
