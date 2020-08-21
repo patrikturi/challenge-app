@@ -14,7 +14,7 @@ class ChallengeViewTests(DatabaseTestCase):
 
         expected_challenge = {
             'id': 2,
-            'endomondo_id': 5,
+            'endomondo_id': '5',
             'title': 'Challenge 1',
             'start_date': self.ch1_start,
             'end_date': self.ch1_end,

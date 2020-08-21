@@ -34,6 +34,7 @@ class Challenge(models.Model):
  
         challenge_dict = model_to_dict(self)
         challenge_dict['teams'] = team_dicts
+        challenge_dict['endomondo_id'] = str(challenge_dict['endomondo_id'])
         return challenge_dict
 
     def __str__(self):
