@@ -1,6 +1,11 @@
 variables:
 - group: Credentials
 
+trigger:
+  branches:
+    exclude:
+    - releases/master
+
 jobs:
 - job: Stage
   timeoutInMinutes: 10
@@ -18,9 +23,4 @@ jobs:
       pip3 install -r requirements.txt
       export PYTHONPATH=$(pwd)
       python3 manage.py test
-      python challenges/integrationtest/test_endomondo_api.py
-    displayName: 'Tests'
-    env:
-      ENDOMONDO_USER: $(ENDOMONDO_USER)
-      ENDOMONDO_PASSWORD: $(ENDOMONDO_PASSWORD)
-      SECRET_KEY: $(SECRET_KEY)
+    displayName: 'Test'
