@@ -4,3 +4,4 @@ virtualenv/
 project/logs/
 .env
 project/static/
+db.sqlite3
