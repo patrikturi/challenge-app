@@ -1,7 +1,7 @@
 trigger:
   branches:
     exclude:
-      - releases/master
+      - master
 
 jobs:
   - job: Stage
