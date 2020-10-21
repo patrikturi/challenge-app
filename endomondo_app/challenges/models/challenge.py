@@ -31,7 +31,7 @@ class Challenge(models.Model):
             team['members'].sort(key=lambda competitor: competitor['calories'], reverse=True)
         team_dicts.sort(key=lambda team: team['name'])
         team_dicts.sort(key=lambda team: team['calories'], reverse=True)
- 
+
         challenge_dict = model_to_dict(self)
         challenge_dict['teams'] = team_dicts
         challenge_dict['endomondo_id'] = str(challenge_dict['endomondo_id'])
@@ -44,7 +44,7 @@ class Challenge(models.Model):
     @classmethod
     def get_last(cls, now):
         active_challenges = Challenge.objects.filter( \
-            Q(start_date__lt=now, end_date__gt=now) | Q(start_date__isnull=True)) \
+            Q(start_date__lte=now, end_date__gte=now) | Q(start_date__isnull=True)) \
             .order_by('-start_date')
 
         if len(active_challenges) > 0:
