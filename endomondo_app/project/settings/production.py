@@ -17,3 +17,6 @@ sentry_sdk.init(
     # django.contrib.auth) you may enable sending PII data.
     send_default_pii=True
 )
+
+ENDOMONDO_USERNAME = os.environ['ENDOMONDO_USER']
+ENDOMONDO_PASSWORD = os.environ['ENDOMONDO_PASSWORD']
