@@ -4,6 +4,10 @@ variables:
 trigger:
   - master
 
+pr:
+  branches:
+    include: []
+
 jobs:
   - job: Stage
     timeoutInMinutes: 10
