@@ -6,7 +6,8 @@ trigger:
 
 pr:
   branches:
-    include: []
+    exclude:
+      - master
 
 jobs:
   - job: Stage
