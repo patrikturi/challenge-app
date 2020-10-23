@@ -73,3 +73,4 @@ cd endomondo_app
 Ákos Denke: Original idea/prototype
 
 Patrik Túri: Rewrite and generalization
+
