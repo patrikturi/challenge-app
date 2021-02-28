@@ -1,63 +1,83 @@
 from django.db.models import Q
-from django.http import Http404
 from django.utils import timezone
-from django.template.response import SimpleTemplateResponse
+from rest_framework.exceptions import NotFound
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from challenges.models.challenge import Challenge
+from challenges.serializers import ChallengeSerializer, ChallengeDetailsSerializer
 
 
-def _challenges_to_short_dict(challenges):
-    return {'challenges': [ch.to_short_dict() for ch in challenges]}
+class GetLastChallenge(APIView):
+    template_name = 'challenge.html'
+
+    def get(self, request):
+        now = timezone.now()
+        challenge = Challenge.get_last(now)
+
+        if challenge is None:
+            return {}
+
+        data = {
+            'title': challenge.title,
+            'page_name': 'Home',
+            'challenge': ChallengeDetailsSerializer(challenge).data
+        }
+        return Response(data)
 
 
-def _get_challenge_view(challenge_dict):
-    if not challenge_dict:
-        return {}
-    title = challenge_dict['title'] if challenge_dict['title'] else 'New Challenge'
-    view = {'title': title, 'page_name': 'Home', 'challenge': challenge_dict}
-    return view
+class GetChallenge(APIView):
+    template_name = 'challenge.html'
+
+    def get(self, request, pk):
+        try:
+            challenge = Challenge.objects.get(id=pk)
+        except Challenge.DoesNotExist:
+            raise NotFound('Challenge does not exist')
+
+        data = {
+            'title': challenge.title,
+            'page_name': 'Home',
+            'challenge': ChallengeDetailsSerializer(challenge).data
+        }
+        return Response(data)
 
 
-def last_challenge(request):
-    now = timezone.now()
-    challenge = Challenge.get_last(now)
+class ListChallenges(APIView):
+    template_name = 'list_challenges.html'
 
-    challenge_dict = challenge.to_dict() if challenge else {}
-
-    view = _get_challenge_view(challenge_dict)
-    return SimpleTemplateResponse('challenge.html', view)
-
-
-def challenge_view(request, id):
-    try:
-        challenge: Challenge = Challenge.objects.get(id=id)
-    except Challenge.DoesNotExist:
-        raise Http404('Challenge does not exist')
-
-    view = _get_challenge_view(challenge.to_dict())
-    return SimpleTemplateResponse('challenge.html', view)
+    def get(self, request):
+        queryset = Challenge.objects.order_by('-start_date')
+        data = {
+            'title': 'All Challenges',
+            'page_name': 'All',
+            'challenges': ChallengeSerializer(queryset, many=True).data
+        }
+        return Response(data)
 
 
-def all_challenges(request):
-    challenges = Challenge.objects.order_by('-start_date')
-    challenges_view = _challenges_to_short_dict(challenges)
-    challenges_view['title'] = 'All Challenges'
-    challenges_view['page_name'] = 'All'
-    return SimpleTemplateResponse('list_challenges.html', challenges_view)
+class ListUpcomingChallenges(APIView):
+    template_name = 'list_challenges.html'
 
-
-def upcoming_challenges(request):
-    challenges = Challenge.objects.filter( \
+    def get(self, request):
+        queryset = Challenge.objects.filter( \
         Q(start_date__gt=timezone.now()) | Q(start_date__isnull=True)).order_by('start_date')
-    challenges_view = _challenges_to_short_dict(challenges)
-    challenges_view['title'] = 'Upcoming Challenges'
-    challenges_view['page_name'] = 'Upcoming'
-    return SimpleTemplateResponse('list_challenges.html', challenges_view)
+        data = {
+            'title': 'Upcoming Challenges',
+            'page_name': 'Upcoming',
+            'challenges': ChallengeSerializer(queryset, many=True).data
+        }
+        return Response(data)
 
 
-def ended_challenges(request):
-    challenges = Challenge.objects.filter(end_date__lt=timezone.now()).order_by('-start_date')
-    challenges_view = _challenges_to_short_dict(challenges)
-    challenges_view['title'] = 'Completed Challenges'
-    challenges_view['page_name'] = 'Completed'
-    return SimpleTemplateResponse('list_challenges.html', challenges_view)
+class ListEndedChallenges(APIView):
+    template_name = 'list_challenges.html'
+
+    def get(self, request):
+        queryset = Challenge.objects.filter(end_date__lt=timezone.now()).order_by('-start_date')
+        data = {
+            'title': 'Completed Challenges',
+            'page_name': 'Completed',
+            'challenges': ChallengeSerializer(queryset, many=True).data
+        }
+        return Response(data)

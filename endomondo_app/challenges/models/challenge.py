@@ -2,7 +2,6 @@ from datetime import timedelta
 
 from django.db import models
 from django.db.models import Q
-from django.forms.models import model_to_dict
 from django.utils import timezone
 
 
@@ -15,27 +14,6 @@ class Challenge(models.Model):
     parse_error = models.NullBooleanField()
     status_text = models.CharField(max_length=200, default='-')
     parse_date = models.DateTimeField('Parse date', null=True, blank=True)
-
-    def to_short_dict(self):
-        return {'id': self.id, 'title': self.title, 'start_date': self.start_date}
-
-    # View of the model. Would be better to use eg. restframework but this was the lowest effort
-    def to_dict(self):
-        # Avoids circular imports
-        from challenges.models.team import Team
-
-        teams = Team.objects.filter(challenge=self)
-        team_dicts = [team.to_dict() for team in teams]
-        for team in team_dicts:
-            team['members'].sort(key=lambda competitor: competitor['name'])
-            team['members'].sort(key=lambda competitor: competitor['calories'], reverse=True)
-        team_dicts.sort(key=lambda team: team['name'])
-        team_dicts.sort(key=lambda team: team['calories'], reverse=True)
-
-        challenge_dict = model_to_dict(self)
-        challenge_dict['teams'] = team_dicts
-        challenge_dict['endomondo_id'] = str(challenge_dict['endomondo_id'])
-        return challenge_dict
 
     def __str__(self):
         name = '"{}"'.format(self.title) if self.title else self.endomondo_id

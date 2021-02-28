@@ -1,6 +1,6 @@
 from datetime import date
-from django.test import TestCase
 from unittest.mock import Mock
+from django.test import TestCase
 
 from challenges.models.challenge import Challenge
 from challenges.models.competitor import Competitor
@@ -14,7 +14,7 @@ class ChallengeTests(TestCase):
         challenge = Challenge(endomondo_id=10)
         self.challenge = challenge
         challenge.save()
- 
+
         challenge_page = Mock()
         self.challenge_page = challenge_page
         self.challenge_title = 'My Endomondo Challenge!'
