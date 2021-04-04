@@ -16,9 +16,9 @@ class ListChallengesTestCase(DatabaseTestCase):
 
     def setUp(self):
         super().setUp()
-        ch4 = Challenge(title='Challenge 4', endomondo_id=12, start_date=date(2020, 6, 1), end_date=date(2020, 6, 30))
-        ch5 = Challenge(title='Challenge 5', endomondo_id=13, start_date=date(2018, 1, 1), end_date=date(2018, 1, 30))
-        ch6 = Challenge(title='Challenge 6', endomondo_id=14)
+        ch4 = Challenge(title='Challenge 4', external_id=12, start_date=date(2020, 6, 1), end_date=date(2020, 6, 30))
+        ch5 = Challenge(title='Challenge 5', external_id=13, start_date=date(2018, 1, 1), end_date=date(2018, 1, 30))
+        ch6 = Challenge(title='Challenge 6', external_id=14)
         ch4.save()
         ch5.save()
         ch6.save()
@@ -58,12 +58,12 @@ class ListChallengesTestCase(DatabaseTestCase):
         self.assertEqual({5, 7}, set(ids))
 
     def test_non_final_challenges(self):
-        ch = Challenge(title='Challenge Recently Ended', endomondo_id=30, start_date=date(2020, 2, 1), end_date=date(2020, 2, 25))
+        ch = Challenge(title='Challenge Recently Ended', external_id=30, start_date=date(2020, 2, 1), end_date=date(2020, 2, 25))
         ch.save()
 
         challenges = Challenge.objects.get_non_final()
 
-        eids = set(ch.endomondo_id for ch in challenges)
+        eids = set(ch.external_id for ch in challenges)
         # 5, 6: ongoing
         # 12: upcoming
         # 14: no date

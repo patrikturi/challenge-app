@@ -25,7 +25,7 @@ class ChallengeManager(models.Manager):
 
 class Challenge(models.Model):
 
-    endomondo_id = models.IntegerField(unique=True)
+    external_id = models.IntegerField(unique=True)
     title = models.CharField(max_length=200, blank=True)
     start_date = models.DateField('Start date', null=True, blank=True)
     end_date = models.DateField('End date', null=True, blank=True)
@@ -46,9 +46,9 @@ class Challenge(models.Model):
         self.save(force_update=True)
 
         for comp_dict in challenge_page.competitors:
-            endomondo_id = comp_dict['endomondo_id']
+            external_id = comp_dict['external_id']
 
-            competitor, _ = Competitor.objects.get_or_create(endomondo_id=endomondo_id)
+            competitor, _ = Competitor.objects.get_or_create(external_id=external_id)
             competitor.name = comp_dict['name']
             competitor.save()
 
@@ -57,5 +57,5 @@ class Challenge(models.Model):
             stats.save()
 
     def __str__(self):
-        name = '"{}"'.format(self.title) if self.title else self.endomondo_id
+        name = '"{}"'.format(self.title) if self.title else self.external_id
         return 'Challenge {}'.format(name)

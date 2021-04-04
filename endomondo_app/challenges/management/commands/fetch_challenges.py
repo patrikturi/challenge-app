@@ -24,8 +24,8 @@ class Command(BaseCommand):
             orig_page = None
             try:
 
-                fetch_logger.info('Updating challenge: {}'.format(ch.endomondo_id))
-                url = 'https://www.endomondo.com/challenges/{}'.format(ch.endomondo_id)
+                fetch_logger.info('Updating challenge: {}'.format(ch.external_id))
+                url = 'https://www.endomondo.com/challenges/{}'.format(ch.external_id)
                 orig_page = process_page(api, ch, url)
             except HTTPError as e:
                 if e.response.status_code == 404:

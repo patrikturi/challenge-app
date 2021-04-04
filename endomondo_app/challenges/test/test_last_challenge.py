@@ -30,7 +30,7 @@ class LastChallengeTests(DatabaseTestCase):
         self.assertEqual(2, challenge['id'])
 
     def test_all_ended_one_upcoming(self):
-        ch4 = Challenge(title='Challenge 4', endomondo_id=12, start_date=date(2021, 1, 1), end_date=date(2021, 1, 30))
+        ch4 = Challenge(title='Challenge 4', external_id=12, start_date=date(2021, 1, 1), end_date=date(2021, 1, 30))
         ch4.save()
         self.timezone_mock.now.return_value = datetime(2020, 10, 1)
 
@@ -40,7 +40,7 @@ class LastChallengeTests(DatabaseTestCase):
         self.assertEqual(2, challenge['id'])
 
     def test_null_start_date(self):
-        ch4 = Challenge(title='Challenge 4', endomondo_id=12)
+        ch4 = Challenge(title='Challenge 4', external_id=12)
         ch4.save()
 
         response = self.client.get('/')
@@ -49,7 +49,7 @@ class LastChallengeTests(DatabaseTestCase):
         self.assertEqual(3, challenge['id'])
 
     def test_all_ended_one_null(self):
-        ch4 = Challenge(title='Challenge 4', endomondo_id=12)
+        ch4 = Challenge(title='Challenge 4', external_id=12)
         ch4.save()
         self.timezone_mock.now.return_value = datetime(2020, 10, 1)
 

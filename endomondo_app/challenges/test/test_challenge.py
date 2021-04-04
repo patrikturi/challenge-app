@@ -9,7 +9,7 @@ class ChallengeTests(TestCase):
 
     def setUp(self):
         super().setUp()
-        challenge = Challenge(endomondo_id=10)
+        challenge = Challenge(external_id=10)
         self.challenge = challenge
         challenge.save()
 
@@ -28,7 +28,7 @@ class ChallengeTests(TestCase):
 
         challenge.update(self.challenge_page)
 
-        challenge = Challenge.objects.get(endomondo_id=10)
+        challenge = Challenge.objects.get(external_id=10)
         self.assertEqual(self.challenge_title, challenge.title)
         self.assertEqual(self.start_date, challenge.start_date)
         self.assertEqual(self.end_date, challenge.end_date)
@@ -41,20 +41,20 @@ class ChallengeTests(TestCase):
         comp1_eid = 5
         comp2_eid = 20
 
-        comp1_orig = Competitor(endomondo_id=comp1_eid, name='Name1', display_name=orig_display_name)
+        comp1_orig = Competitor(external_id=comp1_eid, name='Name1', display_name=orig_display_name)
         comp1_orig.save()
 
         stats1_orig = Stats(challenge=challenge, competitor=comp1_orig, calories=2)
         stats1_orig.save()
 
-        page_comp1 = {'name': 'New Name', 'endomondo_id': comp1_eid, 'calories': 100}
-        page_comp2 = {'name': 'Comp2', 'endomondo_id': comp2_eid, 'calories': 111}
+        page_comp1 = {'name': 'New Name', 'external_id': comp1_eid, 'calories': 100}
+        page_comp2 = {'name': 'Comp2', 'external_id': comp2_eid, 'calories': 111}
         challenge_page.competitors.extend([page_comp1, page_comp2])
         # WHEN
         challenge.update(self.challenge_page)
         # THEN
-        comp1 = Competitor.objects.get(endomondo_id=comp1_eid)
-        comp2 = Competitor.objects.get(endomondo_id=comp2_eid)
+        comp1 = Competitor.objects.get(external_id=comp1_eid)
+        comp2 = Competitor.objects.get(external_id=comp2_eid)
         stats1 = Stats.objects.get(challenge=challenge, competitor=comp1)
         stats2 = Stats.objects.get(challenge=challenge, competitor=comp2)
 

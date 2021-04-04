@@ -37,23 +37,23 @@ class ChallengePageTests(unittest.TestCase):
 
     def test_page1_competitors(self):
         expected_competitors = [
-            {'name': 'Competitor1', 'endomondo_id': 903, 'calories': 25702},
-            {'name': 'Árvíztűrő tükörfúrógép', 'endomondo_id': 926, 'calories': 22564},
-            {'name': 'Competitor3', 'endomondo_id': 8, 'calories': 16360},
+            {'name': 'Competitor1', 'external_id': 903, 'calories': 25702},
+            {'name': 'Árvíztűrő tükörfúrógép', 'external_id': 926, 'calories': 22564},
+            {'name': 'Competitor3', 'external_id': 8, 'calories': 16360},
         ]
         self.assertEqual(expected_competitors, self.page1.competitors)
 
     def test_page2_user5HasNoWorkouts(self):
         expected_competitors = [
-            {'name': 'Competitor4', 'endomondo_id': 299, 'calories': 2978},
-            {'name': 'Competitor5 No workouts', 'endomondo_id': 661, 'calories': 0},
+            {'name': 'Competitor4', 'external_id': 299, 'calories': 2978},
+            {'name': 'Competitor5 No workouts', 'external_id': 661, 'calories': 0},
         ]
         self.assertEqual(expected_competitors, self.page2.competitors)
 
     def test_notStartedPage_competitorsHaveZeroKcal(self):
         expected_competitors = [
-            {'name': 'Competitor1', 'endomondo_id': 190, 'calories': 0},
-            {'name': 'Competitor2', 'endomondo_id': 115, 'calories': 0},
+            {'name': 'Competitor1', 'external_id': 190, 'calories': 0},
+            {'name': 'Competitor2', 'external_id': 115, 'calories': 0},
         ]
         self.assertEqual(expected_competitors, self.not_started_page.competitors)
 

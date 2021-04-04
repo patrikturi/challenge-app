@@ -10,11 +10,11 @@ from challenges.models import Challenge, Competitor, Team
 
 
 class ChallengeAdmin(admin.ModelAdmin):
-    fields = ('endomondo_id', 'endomondo_link', 'site_link', 'competitors_without_team', 'status')
+    fields = ('external_id', 'endomondo_link', 'site_link', 'competitors_without_team', 'status')
     readonly_fields = ('endomondo_link', 'site_link', 'competitors_without_team', 'status' )
 
     def endomondo_link(self, obj):
-        return mark_safe('<a href="https://www.endomondo.com/challenges/{}">Endomondo link</a>'.format(obj.endomondo_id))
+        return mark_safe('<a href="https://www.endomondo.com/challenges/{}">Endomondo link</a>'.format(obj.external_id))
 
     def site_link(self, obj):
         return mark_safe('<a href="/challenge/{}/">Site link</a>'.format(obj.id))
