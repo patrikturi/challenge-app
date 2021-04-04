@@ -26,10 +26,3 @@ class Competitor(models.Model):
             return self.name
         else:
             return 'Competitor {}'.format(self.endomondo_id)
-
-    @classmethod
-    def get_or_create(cls, endomondo_id):
-        try:
-            return Competitor.objects.get(endomondo_id=endomondo_id)
-        except Competitor.DoesNotExist:
-            return Competitor(endomondo_id=endomondo_id)

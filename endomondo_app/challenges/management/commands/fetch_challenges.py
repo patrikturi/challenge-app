@@ -15,7 +15,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         api = EndomondoApi()
 
-        challenges = Challenge.get_non_final()
+        challenges = Challenge.objects.get_non_final()
 
         if challenges:
             api.login(settings.ENDOMONDO_USERNAME, settings.ENDOMONDO_PASSWORD)

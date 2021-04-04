@@ -57,3 +57,11 @@ class LastChallengeTests(DatabaseTestCase):
 
         challenge = response.data['challenge']
         self.assertEqual(5, challenge['id'])
+
+    def test_no_challenges(self):
+        Challenge.objects.all().delete()
+
+        response = self.client.get('/')
+
+        self.assertEqual(200, response.status_code)
+        self.assertEqual({}, response.data)

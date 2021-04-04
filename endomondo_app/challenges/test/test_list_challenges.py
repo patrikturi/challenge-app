@@ -61,7 +61,7 @@ class ListChallengesTestCase(DatabaseTestCase):
         ch = Challenge(title='Challenge Recently Ended', endomondo_id=30, start_date=date(2020, 2, 1), end_date=date(2020, 2, 25))
         ch.save()
 
-        challenges = Challenge.get_non_final()
+        challenges = Challenge.objects.get_non_final()
 
         eids = set(ch.endomondo_id for ch in challenges)
         # 5, 6: ongoing
