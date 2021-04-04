@@ -10,7 +10,7 @@ class ChallengeManager(models.Manager):
     def get_last(self, now):
         try:
             challenge = self.filter(Q(start_date__lte=now, end_date__gte=now) | Q(start_date__isnull=True)).latest('start_date')
-        except Challenge.DoesNotExist:
+        except self.model.DoesNotExist:
             challenge = self.filter(end_date__lt=now).latest('end_date')
 
         return challenge
