@@ -1,12 +1,11 @@
 from requests import HTTPError
 from challenges.models import Challenge
-from challenges.endomondo.api import EndomondoApi
-from challenges.endomondo.challenge_page import ChallengePage
+from fetcher.api import EndomondoApi
+from fetcher.challenge_page import ChallengePage
 from django.conf import settings
-from django.http import HttpResponse
 from django.core.management.base import BaseCommand
 
-from challenges.loggers import fetch_logger
+from fetcher.loggers import fetch_logger
 
 
 class Command(BaseCommand):

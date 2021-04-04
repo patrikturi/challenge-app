@@ -1,5 +1,5 @@
 import requests
-from challenges.loggers import fetch_logger
+from fetcher.loggers import fetch_logger
 
 
 ENDOMONDO_URL = 'https://www.endomondo.com'

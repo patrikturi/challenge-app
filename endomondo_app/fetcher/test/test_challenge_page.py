@@ -3,7 +3,7 @@ import unittest
 from datetime import date
 from pathlib import Path
 
-from challenges.endomondo.challenge_page import ChallengePage
+from fetcher.challenge_page import ChallengePage
 
 
 class ChallengePageTests(unittest.TestCase):
