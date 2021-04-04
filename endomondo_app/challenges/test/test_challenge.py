@@ -2,9 +2,7 @@ from datetime import date
 from unittest.mock import Mock
 from django.test import TestCase
 
-from challenges.models.challenge import Challenge
-from challenges.models.competitor import Competitor
-from challenges.models.stats import Stats
+from challenges.models import Challenge, Competitor, Stats
 
 
 class ChallengeTests(TestCase):

@@ -4,7 +4,7 @@ from rest_framework.exceptions import NotFound
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from challenges.models.challenge import Challenge
+from challenges.models import Challenge
 from challenges.serializers import ChallengeSerializer, ChallengeDetailsSerializer
 
 

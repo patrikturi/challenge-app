@@ -1,7 +1,6 @@
 from django.db import models
 
-from challenges.models.challenge import Challenge
-from challenges.models.competitor import Competitor
+from challenges.models import Challenge, Competitor
 
 
 class Stats(models.Model):

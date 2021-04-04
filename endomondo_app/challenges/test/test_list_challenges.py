@@ -2,7 +2,7 @@ from datetime import date, datetime
 from unittest.mock import patch
 
 from challenges.test.helpers import DatabaseTestCase
-from challenges.models.challenge import Challenge
+from challenges.models import Challenge
 
 
 def _get_by_id(challenges, pk):

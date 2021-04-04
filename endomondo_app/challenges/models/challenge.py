@@ -36,8 +36,7 @@ class Challenge(models.Model):
         return challenge
 
     def update(self, challenge_page):
-        from challenges.models.competitor import Competitor
-        from challenges.models.stats import Stats
+        from challenges.models import Competitor, Stats
 
         self.title = challenge_page.title
         self.start_date = challenge_page.start_date

@@ -2,10 +2,7 @@ from datetime import date
 
 from django.test import TestCase
 
-from challenges.models.challenge import Challenge
-from challenges.models.team import Team
-from challenges.models.competitor import Competitor
-from challenges.models.stats import Stats
+from challenges.models import Challenge, Competitor, Team, Stats
 
 
 class DatabaseTestCase(TestCase):

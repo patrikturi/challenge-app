@@ -1,6 +1,6 @@
 from django.db import models
 
-from challenges.models.challenge import Challenge
+from challenges.models import Challenge
 
 
 class Team(models.Model):

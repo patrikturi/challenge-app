@@ -6,9 +6,7 @@ from django.core.exceptions import ValidationError
 from django.utils.safestring import mark_safe
 from django.db.models import Q 
 
-from challenges.models.challenge import Challenge
-from challenges.models.team import Team
-from challenges.models.competitor import Competitor
+from challenges.models import Challenge, Competitor, Team
 
 
 class ChallengeAdmin(admin.ModelAdmin):
