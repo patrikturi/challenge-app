@@ -15,7 +15,7 @@ class ChallengeTests(TestCase):
 
         challenge_page = Mock()
         self.challenge_page = challenge_page
-        self.challenge_title = 'My Endomondo Challenge!'
+        self.challenge_title = 'My Challenge!'
         self.start_date = date(2019, 10, 20)
         self.end_date = date(2020, 1, 22)
         challenge_page.title = self.challenge_title

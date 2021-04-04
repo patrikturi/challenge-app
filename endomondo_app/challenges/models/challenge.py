@@ -16,7 +16,7 @@ class ChallengeManager(models.Manager):
         return challenge
 
     def get_non_final(self):
-        """These challenges will be updated from endomondo.com"""
+        """These are the challenges to be updated periodically from the 3rd party"""
         # Upcoming or Ongoing or Completed just lately
         end = timezone.now() - timedelta(days=1)
         challenges = self.filter(Q(end_date__gt=end) | Q(end_date__isnull=True)).order_by('-start_date')
