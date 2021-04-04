@@ -1,5 +1,3 @@
-from django.http import HttpResponseNotFound
-
 from challenges.test.helpers import DatabaseTestCase
 
 
@@ -16,21 +14,21 @@ class ChallengeViewTests(DatabaseTestCase):
             'id': 2,
             'endomondo_id': '5',
             'title': 'Challenge 1',
-            'start_date': self.ch1_start,
-            'end_date': self.ch1_end,
+            'start_date': self.ch1_start.strftime('%Y-%m-%d'),
+            'end_date': self.ch1_end.strftime('%Y-%m-%d'),
             'parse_date': None,
             'parse_error': None,
             'status_text': '-',
         }
 
-        challenge = response.context_data['challenge']
+        challenge = response.data['challenge']
         del challenge['teams']
         self.assertEqual(expected_challenge, challenge)
 
     def test_team_view(self):
         response = self.client.get('/challenge/2/')
 
-        team = response.context_data['challenge']['teams'][0]
+        team = response.data['challenge']['teams'][0]
         del team['members']
 
         expected_team = {
@@ -40,7 +38,7 @@ class ChallengeViewTests(DatabaseTestCase):
             'calories': 1501,
         }
 
-        self.assertEqual(expected_team, team)
+        self.assertEqual(expected_team, dict(team))
 
     def test_team_members(self):
         expected_members = [
@@ -66,19 +64,19 @@ class ChallengeViewTests(DatabaseTestCase):
 
         response = self.client.get('/challenge/2/')
 
-        team = response.context_data['challenge']['teams'][0]
+        team = response.data['challenge']['teams'][0]
         members = team['members']
-        self.assertEqual(expected_members, members)
+        self.assertEqual(expected_members, [dict(m) for m in members])
 
     def test_challenge_parts(self):
 
         response = self.client.get('/challenge/2/')
 
-        challenge = response.context_data['challenge']
+        challenge = response.data['challenge']
         self.assertEqual('Challenge 1', challenge['title'])
         teams = [team['name'] for team in challenge['teams']]
         self.assertEqual(['Team A', 'Team B'], teams)
 
     def test_challenge_does_not_exist(self):
         response = self.client.get('/challenge/1000/')
-        self.assertTrue(isinstance(response, HttpResponseNotFound))
+        self.assertEqual(404, response.status_code)

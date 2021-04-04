@@ -2,8 +2,25 @@ from datetime import timedelta
 
 from django.db import models
 from django.db.models import Q
-from django.forms.models import model_to_dict
 from django.utils import timezone
+
+
+class ChallengeManager(models.Manager):
+
+    def get_last(self, now):
+        try:
+            challenge = self.filter(Q(start_date__lte=now, end_date__gte=now) | Q(start_date__isnull=True)).latest('start_date')
+        except Challenge.DoesNotExist:
+            challenge = self.filter(end_date__lt=now).latest('end_date')
+
+        return challenge
+
+    def get_non_final(self):
+        """These challenges will be updated from endomondo.com"""
+        # Upcoming or Ongoing or Completed just lately
+        end = timezone.now() - timedelta(days=1)
+        challenges = self.filter(Q(end_date__gt=end) | Q(end_date__isnull=True)).order_by('-start_date')
+        return challenges
 
 
 class Challenge(models.Model):
@@ -15,51 +32,10 @@ class Challenge(models.Model):
     parse_error = models.NullBooleanField()
     status_text = models.CharField(max_length=200, default='-')
     parse_date = models.DateTimeField('Parse date', null=True, blank=True)
-
-    def to_short_dict(self):
-        return {'id': self.id, 'title': self.title, 'start_date': self.start_date}
-
-    # View of the model. Would be better to use eg. restframework but this was the lowest effort
-    def to_dict(self):
-        # Avoids circular imports
-        from challenges.models.team import Team
-
-        teams = Team.objects.filter(challenge=self)
-        team_dicts = [team.to_dict() for team in teams]
-        for team in team_dicts:
-            team['members'].sort(key=lambda competitor: competitor['name'])
-            team['members'].sort(key=lambda competitor: competitor['calories'], reverse=True)
-        team_dicts.sort(key=lambda team: team['name'])
-        team_dicts.sort(key=lambda team: team['calories'], reverse=True)
-
-        challenge_dict = model_to_dict(self)
-        challenge_dict['teams'] = team_dicts
-        challenge_dict['endomondo_id'] = str(challenge_dict['endomondo_id'])
-        return challenge_dict
-
-    def __str__(self):
-        name = '"{}"'.format(self.title) if self.title else self.endomondo_id
-        return 'Challenge {}'.format(name)
-
-    @classmethod
-    def get_last(cls, now):
-        active_challenges = Challenge.objects.filter( \
-            Q(start_date__lte=now, end_date__gte=now) | Q(start_date__isnull=True)) \
-            .order_by('-start_date')
-
-        if len(active_challenges) > 0:
-            challenge = active_challenges[0]
-        else:
-            challenges_ended = Challenge.objects.filter(end_date__lt=now).order_by('-end_date')
-            if len(challenges_ended) > 0:
-                challenge = challenges_ended[0]
-            else:
-                challenge = None
-        return challenge
+    objects = ChallengeManager()
 
     def update(self, challenge_page):
-        from challenges.models.competitor import Competitor
-        from challenges.models.stats import Stats
+        from challenges.models import Competitor, Stats
 
         self.title = challenge_page.title
         self.start_date = challenge_page.start_date
@@ -72,18 +48,14 @@ class Challenge(models.Model):
         for comp_dict in challenge_page.competitors:
             endomondo_id = comp_dict['endomondo_id']
 
-            comptetitor = Competitor.get_or_create(endomondo_id)
-            comptetitor.name = comp_dict['name']
-            comptetitor.save()
+            competitor, _ = Competitor.objects.get_or_create(endomondo_id=endomondo_id)
+            competitor.name = comp_dict['name']
+            competitor.save()
 
-            stats = Stats.get_or_create(challenge=self, competitor=comptetitor)
+            stats, _ = Stats.objects.get_or_create(challenge=self, competitor=competitor)
             stats.calories = comp_dict['calories']
             stats.save()
 
-    @classmethod
-    def get_non_final(cls):
-        """These challenges will be updated from endomondo.com"""
-        # Upcoming or Ongoing or Completed just lately
-        end = timezone.now() - timedelta(days=1)
-        challenges = Challenge.objects.filter(Q(end_date__gt=end) | Q(end_date__isnull=True)).order_by('-start_date')
-        return challenges
+    def __str__(self):
+        name = '"{}"'.format(self.title) if self.title else self.endomondo_id
+        return 'Challenge {}'.format(name)

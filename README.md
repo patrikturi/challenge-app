@@ -63,6 +63,7 @@ pip install -r requirements.txt
 cd endomondo_app
 . env.sh
 . ./virtualenv/bin/activate
+touch ./project/db/db.sqlite3
 ./manage.py migrate
 ./manage.py test
 ./manage.py runserver

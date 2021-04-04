@@ -1,5 +1,5 @@
 from requests import HTTPError
-from challenges.models.challenge import Challenge
+from challenges.models import Challenge
 from challenges.endomondo.api import EndomondoApi
 from challenges.endomondo.challenge_page import ChallengePage
 from django.conf import settings
@@ -15,7 +15,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         api = EndomondoApi()
 
-        challenges = Challenge.get_non_final()
+        challenges = Challenge.objects.get_non_final()
 
         if challenges:
             api.login(settings.ENDOMONDO_USERNAME, settings.ENDOMONDO_PASSWORD)

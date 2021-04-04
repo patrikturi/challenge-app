@@ -2,12 +2,12 @@ from datetime import date, datetime
 from unittest.mock import patch
 
 from challenges.test.helpers import DatabaseTestCase
-from challenges.models.challenge import Challenge
+from challenges.models import Challenge
 
 
-def _get_by_id(challenges, id):
+def _get_by_id(challenges, pk):
     for ch in challenges:
-        if ch['id'] == id:
+        if ch['id'] == pk:
             return ch
     return None
 
@@ -34,34 +34,34 @@ class ListChallengesTestCase(DatabaseTestCase):
         response = self.client.get('/challenges/')
 
         self.assertEqual(200, response.status_code)
-        ids = [ch['id'] for ch in response.context_data['challenges']]
+        ids = [ch['id'] for ch in response.data['challenges']]
         self.assertEqual({1, 2, 3, 4, 5, 6, 7}, set(ids))
 
     def test_challenge_short_view(self):
         response = self.client.get('/challenges/')
-        actual_ch = _get_by_id(response.context_data['challenges'], 1)
-        expected_ch = {'id': 1, 'title': 'Challenge 0', 'start_date': date(2019, 11, 20)}
-        self.assertEqual(expected_ch, actual_ch)
+        actual_ch = _get_by_id(response.data['challenges'], 1)
+        expected_ch = {'id':1, 'title': 'Challenge 0', 'start_date': '2019-11-20'}
+        self.assertEqual(expected_ch, dict(actual_ch))
 
     def test_ended_challenges(self):
         response = self.client.get('/challenges/ended/')
 
         self.assertEqual(200, response.status_code)
-        ids = [ch['id'] for ch in response.context_data['challenges']]
+        ids = [ch['id'] for ch in response.data['challenges']]
         self.assertEqual({1, 4, 6}, set(ids))
 
     def test_upcoming_challenges(self):
         response = self.client.get('/challenges/upcoming/')
 
         self.assertEqual(200, response.status_code)
-        ids = [ch['id'] for ch in response.context_data['challenges']]
+        ids = [ch['id'] for ch in response.data['challenges']]
         self.assertEqual({5, 7}, set(ids))
 
     def test_non_final_challenges(self):
         ch = Challenge(title='Challenge Recently Ended', endomondo_id=30, start_date=date(2020, 2, 1), end_date=date(2020, 2, 25))
         ch.save()
 
-        challenges = Challenge.get_non_final()
+        challenges = Challenge.objects.get_non_final()
 
         eids = set(ch.endomondo_id for ch in challenges)
         # 5, 6: ongoing

@@ -1,63 +1,56 @@
 from django.db.models import Q
-from django.http import Http404
 from django.utils import timezone
-from django.template.response import SimpleTemplateResponse
+from rest_framework.exceptions import NotFound
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
-from challenges.models.challenge import Challenge
-
-
-def _challenges_to_short_dict(challenges):
-    return {'challenges': [ch.to_short_dict() for ch in challenges]}
-
-
-def _get_challenge_view(challenge_dict):
-    if not challenge_dict:
-        return {}
-    title = challenge_dict['title'] if challenge_dict['title'] else 'New Challenge'
-    view = {'title': title, 'page_name': 'Home', 'challenge': challenge_dict}
-    return view
+from challenges.models import Challenge
+from challenges.serializers import ChallengeSerializer, ChallengeDetailsSerializer
 
 
-def last_challenge(request):
-    now = timezone.now()
-    challenge = Challenge.get_last(now)
+class GetChallenge(APIView):
+    template_name = 'challenge.html'
 
-    challenge_dict = challenge.to_dict() if challenge else {}
+    def get(self, request, pk, query):
+        try:
+            challenge = self.get_queryset(pk, query)
+        except Challenge.DoesNotExist:
+            if query == 'last':
+                return Response({})
+            else:
+                raise NotFound('Challenge does not exist')
 
-    view = _get_challenge_view(challenge_dict)
-    return SimpleTemplateResponse('challenge.html', view)
+        data = {
+            'title': challenge.title,
+            'page_name': 'Home',
+            'challenge': ChallengeDetailsSerializer(challenge).data
+        }
+        return Response(data)
 
-
-def challenge_view(request, id):
-    try:
-        challenge: Challenge = Challenge.objects.get(id=id)
-    except Challenge.DoesNotExist:
-        raise Http404('Challenge does not exist')
-
-    view = _get_challenge_view(challenge.to_dict())
-    return SimpleTemplateResponse('challenge.html', view)
-
-
-def all_challenges(request):
-    challenges = Challenge.objects.order_by('-start_date')
-    challenges_view = _challenges_to_short_dict(challenges)
-    challenges_view['title'] = 'All Challenges'
-    challenges_view['page_name'] = 'All'
-    return SimpleTemplateResponse('list_challenges.html', challenges_view)
-
-
-def upcoming_challenges(request):
-    challenges = Challenge.objects.filter( \
-        Q(start_date__gt=timezone.now()) | Q(start_date__isnull=True)).order_by('start_date')
-    challenges_view = _challenges_to_short_dict(challenges)
-    challenges_view['title'] = 'Upcoming Challenges'
-    challenges_view['page_name'] = 'Upcoming'
-    return SimpleTemplateResponse('list_challenges.html', challenges_view)
+    def get_queryset(self, pk, query):
+        if query == 'last':
+            now = timezone.now()
+            return Challenge.objects.get_last(now)
+        else:
+            return Challenge.objects.get(id=pk)
 
 
-def ended_challenges(request):
-    challenges = Challenge.objects.filter(end_date__lt=timezone.now()).order_by('-start_date')
-    challenges_view = _challenges_to_short_dict(challenges)
-    challenges_view['title'] = 'Completed Challenges'
-    challenges_view['page_name'] = 'Completed'
-    return SimpleTemplateResponse('list_challenges.html', challenges_view)
+class ListChallenges(APIView):
+    template_name = 'list_challenges.html'
+
+    def get(self, request, query):
+        queryset = self.get_queryset(query)
+        data = {
+            'title': 'All Challenges',
+            'page_name': 'All',
+            'challenges': ChallengeSerializer(queryset, many=True).data
+        }
+        return Response(data)
+
+    def get_queryset(self, query):
+        if query == 'upcoming':
+            return Challenge.objects.filter(Q(start_date__gt=timezone.now()) | Q(start_date__isnull=True)).order_by('start_date')
+        elif query == 'ended':
+            return Challenge.objects.filter(end_date__lt=timezone.now()).order_by('-start_date')
+        else:
+            return Challenge.objects.order_by('-start_date')

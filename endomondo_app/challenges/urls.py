@@ -4,9 +4,9 @@ from . import views
 
 
 urlpatterns = [
-    path('', views.last_challenge),
-    path('challenge/<int:id>/', views.challenge_view),
-    path('challenges/', views.all_challenges),
-    path('challenges/upcoming/', views.upcoming_challenges),
-    path('challenges/ended/', views.ended_challenges),
+    path('', views.GetChallenge.as_view(), {'pk': None, 'query': 'last'}),
+    path('challenge/<int:pk>/', views.GetChallenge.as_view(), {'query': 'id'}),
+    path('challenges/', views.ListChallenges.as_view(), {'query': 'all'}),
+    path('challenges/upcoming/', views.ListChallenges.as_view(), {'query': 'upcoming'}),
+    path('challenges/ended/', views.ListChallenges.as_view(), {'query': 'ended'}),
 ]

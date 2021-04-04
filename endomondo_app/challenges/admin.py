@@ -4,11 +4,9 @@ from django import forms
 from django.contrib import admin
 from django.core.exceptions import ValidationError
 from django.utils.safestring import mark_safe
-from django.db.models import Q 
+from django.db.models import Q
 
-from challenges.models.challenge import Challenge
-from challenges.models.team import Team
-from challenges.models.competitor import Competitor
+from challenges.models import Challenge, Competitor, Team
 
 
 class ChallengeAdmin(admin.ModelAdmin):
@@ -46,7 +44,7 @@ class CompetitorForm(forms.ModelForm):
 
     def clean(self):
         """
-        This is the function that can be used to 
+        This is the function that can be used to
         validate your model data from admin
         """
         super().clean()
