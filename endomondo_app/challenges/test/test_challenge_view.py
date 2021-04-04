@@ -12,7 +12,7 @@ class ChallengeViewTests(DatabaseTestCase):
 
         expected_challenge = {
             'id': 2,
-            'endomondo_id': '5',
+            'external_id': '5',
             'title': 'Challenge 1',
             'start_date': self.ch1_start.strftime('%Y-%m-%d'),
             'end_date': self.ch1_end.strftime('%Y-%m-%d'),
@@ -44,19 +44,19 @@ class ChallengeViewTests(DatabaseTestCase):
         expected_members = [
             {
                 'id': 1,
-                'endomondo_id': '10',
+                'external_id': '10',
                 'name': 'Competitor 1',
                 'calories': 1001
             },
             {
                 'id': 3,
-                'endomondo_id': '25',
+                'external_id': '25',
                 'name': 'Competitor C', # should contain dispaly_name if both name and display_name are provided
                 'calories': 500
             },
             {
                 'id': 4,
-                'endomondo_id': '26',
+                'external_id': '26',
                 'name': 'Competitor 4',
                 'calories': 0
             }

@@ -1,12 +1,11 @@
 from requests import HTTPError
 from challenges.models import Challenge
-from challenges.endomondo.api import EndomondoApi
-from challenges.endomondo.challenge_page import ChallengePage
+from fetcher.api import EndomondoApi
+from fetcher.challenge_page import ChallengePage
 from django.conf import settings
-from django.http import HttpResponse
 from django.core.management.base import BaseCommand
 
-from challenges.loggers import fetch_logger
+from fetcher.loggers import fetch_logger
 
 
 class Command(BaseCommand):
@@ -24,8 +23,8 @@ class Command(BaseCommand):
             orig_page = None
             try:
 
-                fetch_logger.info('Updating challenge: {}'.format(ch.endomondo_id))
-                url = 'https://www.endomondo.com/challenges/{}'.format(ch.endomondo_id)
+                fetch_logger.info('Updating challenge: {}'.format(ch.external_id))
+                url = 'https://www.endomondo.com/challenges/{}'.format(ch.external_id)
                 orig_page = process_page(api, ch, url)
             except HTTPError as e:
                 if e.response.status_code == 404:

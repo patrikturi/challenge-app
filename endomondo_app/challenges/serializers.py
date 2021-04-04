@@ -7,7 +7,7 @@ from .models.stats import Stats
 
 
 class CompetitorSerializer(serializers.ModelSerializer):
-    endomondo_id = serializers.CharField()
+    external_id = serializers.CharField()
     name = serializers.SerializerMethodField()
     calories = serializers.SerializerMethodField()
 
@@ -23,7 +23,7 @@ class CompetitorSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Competitor
-        fields = ('id', 'name', 'endomondo_id', 'calories')
+        fields = ('id', 'name', 'external_id', 'calories')
 
 
 class TeamSerializer(serializers.ModelSerializer):
@@ -56,7 +56,7 @@ class TeamSerializer(serializers.ModelSerializer):
 
 
 class ChallengeDetailsSerializer(serializers.ModelSerializer):
-    endomondo_id = serializers.CharField()
+    external_id = serializers.CharField()
     teams = serializers.SerializerMethodField()
 
     def get_teams(self, obj):
@@ -65,7 +65,7 @@ class ChallengeDetailsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Challenge
-        fields = ('id', 'title', 'start_date', 'end_date', 'parse_error', 'status_text', 'parse_date', 'endomondo_id', 'teams')
+        fields = ('id', 'title', 'start_date', 'end_date', 'parse_error', 'status_text', 'parse_date', 'external_id', 'teams')
 
 
 class ChallengeSerializer(serializers.ModelSerializer):

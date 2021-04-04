@@ -2,6 +2,7 @@ from collections import Counter
 
 from django import forms
 from django.contrib import admin
+from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.utils.safestring import mark_safe
 from django.db.models import Q
@@ -10,11 +11,11 @@ from challenges.models import Challenge, Competitor, Team
 
 
 class ChallengeAdmin(admin.ModelAdmin):
-    fields = ('endomondo_id', 'endomondo_link', 'site_link', 'competitors_without_team', 'status')
-    readonly_fields = ('endomondo_link', 'site_link', 'competitors_without_team', 'status' )
+    fields = ('external_id', 'external_link', 'site_link', 'competitors_without_team', 'status')
+    readonly_fields = ('external_link', 'site_link', 'competitors_without_team', 'status' )
 
-    def endomondo_link(self, obj):
-        return mark_safe('<a href="https://www.endomondo.com/challenges/{}">Endomondo link</a>'.format(obj.endomondo_id))
+    def external_link(self, obj):
+        return mark_safe('<a href="{}/challenges/{}">{} link</a>'.format(settings.CHALLENGES_THIRD_PARTY_HOST_URL, obj.external_id, settings.CHALLENGES_THIRD_PARTY_NAME))
 
     def site_link(self, obj):
         return mark_safe('<a href="/challenge/{}/">Site link</a>'.format(obj.id))
@@ -63,7 +64,7 @@ class CompetitorAdmin(admin.ModelAdmin):
     fields = ('display_name', 'teams')
     form = CompetitorForm
 
-    # Competitors are parsed/created from Endomondo, it is not needed to create them manually
+    # Competitors are parsed/created from the third party, it is not needed to create them manually
     def has_add_permission(self, request, obj=None):
         return False
 

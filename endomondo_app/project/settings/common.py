@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 import mimetypes
 import os
 
+CHALLENGES_THIRD_PARTY_NAME = 'Endomondo'
+CHALLENGES_THIRD_PARTY_HOST_URL = 'https://www.endomondo.com'
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -28,7 +30,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'challenges'
+    'challenges',
+    'fetcher',
 ]
 
 MIDDLEWARE = [

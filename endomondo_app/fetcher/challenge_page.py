@@ -34,7 +34,7 @@ class ChallengePage:
             id = int(href.split('/')[-1])
             competitors.append({
                 'name': element.text,
-                'endomondo_id': id,
+                'external_id': id,
                 'calories': self._parse_calories(id)
             })
         return competitors
