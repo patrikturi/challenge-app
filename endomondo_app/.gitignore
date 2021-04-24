@@ -1,7 +1,0 @@
-project/db/
-virtualenv/
-*.pyc
-project/logs/
-.env
-project/static/
-db.sqlite3
