@@ -11,7 +11,7 @@ Endomondo challenges allow users to compete based on calories burnt.
 ## Deployment
 
 * `git clone git@github.com:patrikturi/endomondo-team-challenge.git`
-* `cd endomondo-team-challenge/endomondo_app`
+* `cd endomondo-team-challenge`
 * Create `.env` file and fill in these secrets:
 ```
 ENDOMONDO_USER=
@@ -35,7 +35,7 @@ sudo su
 * Create new admin user:
 ```
 sudo docker ps
-sudo docker exec -it <container id> /endomondo_app/manage.py createsuperuser
+sudo docker exec -it <container id> /app/manage.py createsuperuser
 ```
 * Log in at https://localhost/admin
 * Follow admin guide [here](docs/admin-guide.md)
@@ -50,17 +50,15 @@ sudo su
 ```
 
 ## Development
-* Create `endomondo_app/.env` file same as in Deployment
+* Create `.env` file same as in Deployment
 * Install:
 ```
-cd endomondo_app
 python3 -m venv virtualenv
 . ./virtualenv/bin/activate
 pip install -r requirements.txt
 ```
 * Dev:
 ```
-cd endomondo_app
 . env.sh
 . ./virtualenv/bin/activate
 touch ./project/db/db.sqlite3

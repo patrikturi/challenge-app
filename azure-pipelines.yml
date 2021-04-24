@@ -12,7 +12,6 @@ jobs:
           architecture: "x64"
       - bash: |
           set -e
-          cd endomondo_app
           pip3 install -r requirements.txt
           export PYTHONPATH=$(pwd)
           python3 manage.py test

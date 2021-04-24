@@ -1,1 +1,1 @@
-*/15 * * * * /usr/local/bin/python /endomondo_app/manage.py fetch_challenges > /endomondo_app/project/logs/fetch.stderr 2>&1
+*/15 * * * * /usr/local/bin/python /app/manage.py fetch_challenges > /app/project/logs/fetch.stderr 2>&1

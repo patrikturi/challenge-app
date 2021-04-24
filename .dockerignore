@@ -1,2 +1,4 @@
 .vscode/
 virtualenv/
+azure-pipelines.yml
+README.md

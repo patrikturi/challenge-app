@@ -5,8 +5,8 @@ services:
     build: .
     command: ["/app_entrypoint.sh"]
     volumes:
-      - ./project/db:/endomondo_app/project/db
-      - ./project/logs:/endomondo_app/project/logs
+      - ./project/db:/app/project/db
+      - ./project/logs:/app/project/logs
     ports:
       - "80:80"
     restart: always
@@ -16,8 +16,8 @@ services:
     build: .
     command: ["/cron_entrypoint.sh"]
     volumes:
-        - ./project/db:/endomondo_app/project/db
-        - ./project/logs:/endomondo_app/project/logs
+        - ./project/db:/app/project/db
+        - ./project/logs:/app/project/logs
     restart: always
     env_file:
         - .env
