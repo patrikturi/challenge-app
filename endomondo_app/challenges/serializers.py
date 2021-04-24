@@ -46,9 +46,7 @@ class TeamSerializer(serializers.ModelSerializer):
         return sum([stat.calories for stat in stats])
 
     def get_competitors(self, obj):
-        if self.competitors is None:
-            self.competitors = Competitor.objects.filter(teams__id=obj.id)
-        return self.competitors
+        return Competitor.objects.filter(teams__id=obj.id)
 
     class Meta:
         model = Team

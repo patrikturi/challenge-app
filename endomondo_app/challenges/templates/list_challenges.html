@@ -15,7 +15,7 @@
     <div class='col-sm-6'><a href='/challenge/{{ch.id}}/'>{{ch.title}}</a></div>
     <div class='col-sm-6'>
         {% if ch.start_date %}
-            {{ch.start_date|date:"M d, Y"}}
+            {{ch.start_date}}
         {% else %}
             Unknown
         {% endif %}

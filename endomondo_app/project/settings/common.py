@@ -49,6 +49,7 @@ REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': [
         'rest_framework.renderers.TemplateHTMLRenderer',
     ],
+    'DATETIME_FORMAT': '%Y-%m-%d %H:%M UTC'
 }
 
 ROOT_URLCONF = 'project.urls'

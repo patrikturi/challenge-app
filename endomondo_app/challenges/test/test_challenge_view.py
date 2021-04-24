@@ -76,6 +76,7 @@ class ChallengeViewTests(DatabaseTestCase):
         self.assertEqual('Challenge 1', challenge['title'])
         teams = [team['name'] for team in challenge['teams']]
         self.assertEqual(['Team A', 'Team B'], teams)
+        self.assertEqual([1501, 120], [team['calories'] for team in challenge['teams']])
 
     def test_challenge_does_not_exist(self):
         response = self.client.get('/challenge/1000/')
