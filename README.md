@@ -28,7 +28,7 @@ sudo su
 ./restart.sh
 ```
 * http://localhost should be up and running
-* Check `./projects/logs/` and https://sentry.io if the fetcher has any errors
+* Check `./core/logs/` and https://sentry.io if the fetcher has any errors
 
 ## Administration
 
@@ -61,7 +61,7 @@ pip install -r requirements.txt
 ```
 . env.sh
 . ./virtualenv/bin/activate
-touch ./project/db/db.sqlite3
+touch ./core/db/db.sqlite3
 ./manage.py migrate
 ./manage.py test
 ./manage.py runserver

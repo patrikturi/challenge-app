@@ -1,10 +1,10 @@
 .venv/
 .idea/
 .vscode/
-project/db/
+core/db/
 virtualenv/
 *.pyc
-project/logs/
+core/logs/
 .env
-project/static/
+core/static/
 db.sqlite3

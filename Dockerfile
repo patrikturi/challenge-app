@@ -17,4 +17,4 @@ RUN chmod 0744 manage.py
 
 RUN pip install -r requirements.txt
 
-ENV DJANGO_SETTINGS_MODULE=project.settings.production
+ENV DJANGO_SETTINGS_MODULE=core.settings.production

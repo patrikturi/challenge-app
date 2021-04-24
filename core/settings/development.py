@@ -1,4 +1,4 @@
-from project.settings.common import *
+from core.settings.common import *
 
 
 DEBUG = True

@@ -1,6 +1,6 @@
 #! /bin/sh
 set -e
-rm -rf ./project/static
+rm -rf ./core/static
 python ./manage.py migrate
 python ./manage.py collectstatic
-gunicorn project.wsgi --bind 0.0.0.0:80 -w 4
+gunicorn core.wsgi --bind 0.0.0.0:80 -w 4
