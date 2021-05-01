@@ -1,17 +1,19 @@
 [![Build Status](https://dev.azure.com/patrikturi/endomondo-team-challenge/_apis/build/status/patrikturi.endomondo-team-challenge?branchName=master)](https://dev.azure.com/patrikturi/endomondo-team-challenge/_build/latest?definitionId=3&branchName=master)
 
-## Description
+## Introduction
 
-[Endomondo](http://endomondo.com) allows users to track their fitness and health statistics with a mobile application and website.
+This app lets you host team challenges. Teams can be set up in the admin site and competitor data is parsed from a third party service of choice.
 
-Endomondo challenges allow users to compete based on calories burnt.
+> Example: which team ran the most kilometers this month using [Strava](https://strava.com).
 
-**Endomondo Team Challange** is an unofficial extension to compete in teams, not individually.
+**Supported data providers**:
+* [Strava](https://strava.com) (In development)
+* [Endomondo](http://endomondo.com) (Retired - only historical support)
 
 ## Deployment
 
-* `git clone git@github.com:patrikturi/endomondo-team-challenge.git`
-* `cd endomondo-team-challenge`
+* `git clone git@github.com:patrikturi/challenge-app.git`
+* `cd challenge-app`
 * Create `.env` file and fill in these secrets:
 ```
 ENDOMONDO_USER=
@@ -66,9 +68,3 @@ touch ./core/db/db.sqlite3
 ./manage.py test
 ./manage.py runserver
 ```
-
-## Authors
-
-Ákos Denke: Original idea/prototype
-
-Patrik Túri: Rewrite and generalization
