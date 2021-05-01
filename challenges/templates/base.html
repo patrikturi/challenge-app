@@ -7,14 +7,18 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>{{title}}</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <script src="https://kit.fontawesome.com/a14c6235d9.js" crossorigin="anonymous"></script>
         <link rel='stylesheet' type='text/css' href="{% static 'css/style.css' %}">
-        <link rel="shortcut icon" type="image/png" href="{% static 'img/logo.png' %}"/>
+        <link rel="apple-touch-icon" sizes="180x180" href="{% static 'apple-touch-icon.png' %}">
+        <link rel="icon" type="image/png" sizes="32x32" href="{% static 'avicon-32x32.png' %}">
+        <link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon-16x16.png' %}">
+        <link rel="manifest" href="{% static 'site.webmanifest' %}">
+
     </head>
     <body>
         <div class='container'>
-            <h1 class='text-success'>Endomondo Team Challenge</h1>
+            <h1>Challenge App</h1>
             <nav class="navbar navbar-expand-sm navbar-light bg-light">
-                <a class="navbar-brand" href="#"><img src="{% static 'img/logo.png' %}" width=40 height=40/></a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                   <span class="navbar-toggler-icon"></span>
                 </button>
@@ -32,6 +36,7 @@
                     </ul>
                 </div>
             </nav>
+            <hr style="border-width: 2px; margin-top: 0;"/>
             {% block content %}
             {% endblock %}
         </div>

@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% load static %}
+
 {% block content %}
 
 <h2>{{title}}</h2>
@@ -12,7 +14,7 @@
 {% for ch in challenges %}
 {% if ch.title %}
 <div class='row challenges_row'>
-    <div class='col-sm-6'><a href='/challenge/{{ch.id}}/'>{{ch.title}}</a></div>
+    <div class='col-sm-6 challenge-list-item'><img alt="Endomondo" title="Endomondo" src="{% static 'img/endomondo-logo.png' %}" width=20 height=20 /> <a href='/challenge/{{ch.id}}/'>{{ch.title}}</a></div>
     <div class='col-sm-6'>
         {% if ch.start_date %}
             {{ch.start_date}}

@@ -1,12 +1,14 @@
 {% extends 'base.html' %}
 
+{% load static %}
+
 {% block content %}
 
-<h2>{{title}}</h2>
+<div class='challenge-title'><a href="https://endomondo.com/" target="_blank"><img alt="Endomondo" title="Endomondo" src="{% static 'img/endomondo-logo.png' %}" width=40 height=40/></a><h2>{{title}}</h2></div>
 {% with ch=challenge %}
 <div class="row row-challenge-header">
     <div class='col-sm-4'>
-        <a href='https://www.endomondo.com/challenges/{{ch.external_id}}' target="_blank" rel="noopener noreferrer">Endomondo link</a>
+        <a href='https://www.endomondo.com/challenges/{{ch.external_id}}' target="_blank" rel="noopener noreferrer">Challenge link <i class="fas fa-external-link-alt"></i></a>
     </div>
     <div class='col-sm-4'>
         Start: {% if ch.start_date %} {{ch.start_date}} {% else %} Unknown {% endif %}
