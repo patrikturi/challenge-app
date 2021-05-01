@@ -1,3 +1,4 @@
+from django.db.models import Prefetch
 from rest_framework import serializers
 
 from .models.challenge import Challenge
@@ -16,8 +17,7 @@ class CompetitorSerializer(serializers.ModelSerializer):
 
     def get_calories(self, obj):
         try:
-            stats = Stats.objects.get(challenge__id=self.context['challenge_id'], competitor__id=obj.id)
-            return stats.calories
+            return sum(stat.calories for stat in obj.stats.all())
         except Stats.DoesNotExist:
             return 0
 
@@ -36,14 +36,15 @@ class TeamSerializer(serializers.ModelSerializer):
 
     def get_members(self, obj):
         return [
-            CompetitorSerializer(comp, context={'challenge_id': obj.challenge.id}).data
-            for comp in self.get_competitors(obj)
+            CompetitorSerializer(comp, context={'challenge_id': obj.challenge_id}).data
+            for comp in obj.competitors.all()
         ]
 
     def get_calories(self, obj):
-        competitors = self.get_competitors(obj)
-        stats = Stats.objects.filter(challenge__id=obj.challenge.id, competitor__in=competitors)
-        return sum([stat.calories for stat in stats])
+        return sum([
+            sum([stat.calories for stat in comp.stats.all()])
+            for comp in obj.competitors.all()
+        ])
 
     def get_competitors(self, obj):
         return Competitor.objects.filter(teams__id=obj.id)
@@ -58,7 +59,8 @@ class ChallengeDetailsSerializer(serializers.ModelSerializer):
     teams = serializers.SerializerMethodField()
 
     def get_teams(self, obj):
-        teams = Team.objects.filter(challenge=obj.id)
+        teams = Team.objects.filter(challenge=obj).prefetch_related('competitors') \
+                .prefetch_related(Prefetch('competitors__stats', queryset=Stats.objects.filter(challenge=obj)))
         return TeamSerializer(teams, many=True).data
 
     class Meta:
