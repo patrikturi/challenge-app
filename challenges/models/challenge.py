@@ -23,9 +23,21 @@ class ChallengeManager(models.Manager):
         return challenges
 
 
+class ChallengeTypes(models.TextChoices):
+    ENDOMONDO = 'ENDOMONDO', False
+    STRAVA = 'STRAVA', True
+
+    def __new__(cls, svalue, enabled):
+        obj = str.__new__(cls, svalue)
+        obj._value_ = svalue
+        obj.enabled = enabled
+        return obj
+
+
 class Challenge(models.Model):
 
     external_id = models.IntegerField(unique=True)
+    kind = models.CharField(max_length=16, choices=ChallengeTypes.choices)
     title = models.CharField(max_length=200, blank=True)
     start_date = models.DateField('Start date', null=True, blank=True)
     end_date = models.DateField('End date', null=True, blank=True)
@@ -53,7 +65,7 @@ class Challenge(models.Model):
             competitor.save()
 
             stats, _ = Stats.objects.get_or_create(challenge=self, competitor=competitor)
-            stats.calories = comp_dict['calories']
+            stats.value = comp_dict['calories']
             stats.save()
 
     def __str__(self):

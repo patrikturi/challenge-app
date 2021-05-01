@@ -44,14 +44,14 @@ class ChallengeTests(TestCase):
         comp1_orig = Competitor(external_id=comp1_eid, name='Name1', display_name=orig_display_name)
         comp1_orig.save()
 
-        stats1_orig = Stats(challenge=challenge, competitor=comp1_orig, calories=2)
+        stats1_orig = Stats(challenge=challenge, competitor=comp1_orig, value=2)
         stats1_orig.save()
 
         page_comp1 = {'name': 'New Name', 'external_id': comp1_eid, 'calories': 100}
         page_comp2 = {'name': 'Comp2', 'external_id': comp2_eid, 'calories': 111}
         challenge_page.competitors.extend([page_comp1, page_comp2])
         # WHEN
-        challenge.update(self.challenge_page)
+        challenge.update(challenge_page)
         # THEN
         comp1 = Competitor.objects.get(external_id=comp1_eid)
         comp2 = Competitor.objects.get(external_id=comp2_eid)
@@ -60,6 +60,6 @@ class ChallengeTests(TestCase):
 
         self.assertEqual(page_comp1['name'], comp1.name)
         self.assertEqual(orig_display_name, comp1.display_name)
-        self.assertEqual(page_comp1['calories'], stats1.calories)
+        self.assertEqual(page_comp1['calories'], stats1.value)
         self.assertEqual(page_comp2['name'], comp2.name)
-        self.assertEqual(page_comp2['calories'], stats2.calories)
+        self.assertEqual(page_comp2['calories'], stats2.value)

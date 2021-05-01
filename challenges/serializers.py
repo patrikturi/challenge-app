@@ -10,25 +10,25 @@ from .models.stats import Stats
 class CompetitorSerializer(serializers.ModelSerializer):
     external_id = serializers.CharField()
     name = serializers.SerializerMethodField()
-    calories = serializers.SerializerMethodField()
+    score = serializers.SerializerMethodField()
 
     def get_name(self, obj):
         return obj.get_name()
 
-    def get_calories(self, obj):
+    def get_score(self, obj):
         try:
-            return sum(stat.calories for stat in obj.stats.all())
+            return sum(stat.value for stat in obj.stats.all())
         except Stats.DoesNotExist:
             return 0
 
     class Meta:
         model = Competitor
-        fields = ('id', 'name', 'external_id', 'calories')
+        fields = ('id', 'name', 'external_id', 'score')
 
 
 class TeamSerializer(serializers.ModelSerializer):
     members = serializers.SerializerMethodField()
-    calories = serializers.SerializerMethodField()
+    score = serializers.SerializerMethodField()
 
     def __init__(self, *argc, **argv):
         super().__init__(*argc, **argv)
@@ -40,9 +40,9 @@ class TeamSerializer(serializers.ModelSerializer):
             for comp in obj.competitors.all()
         ]
 
-    def get_calories(self, obj):
+    def get_score(self, obj):
         return sum([
-            sum([stat.calories for stat in comp.stats.all()])
+            sum([stat.value for stat in comp.stats.all()])
             for comp in obj.competitors.all()
         ])
 
@@ -51,7 +51,7 @@ class TeamSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Team
-        fields = ('id', 'name', 'challenge', 'members', 'calories')
+        fields = ('id', 'name', 'challenge', 'members', 'score')
 
 
 class ChallengeDetailsSerializer(serializers.ModelSerializer):

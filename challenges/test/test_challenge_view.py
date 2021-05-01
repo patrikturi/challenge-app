@@ -35,7 +35,7 @@ class ChallengeViewTests(DatabaseTestCase):
             'id': 1,
             'name': 'Team A',
             'challenge': 2,
-            'calories': 1501,
+            'score': 1501,
         }
 
         self.assertEqual(expected_team, dict(team))
@@ -46,19 +46,19 @@ class ChallengeViewTests(DatabaseTestCase):
                 'id': 1,
                 'external_id': '10',
                 'name': 'Competitor 1',
-                'calories': 1001
+                'score': 1001
             },
             {
                 'id': 3,
                 'external_id': '25',
                 'name': 'Competitor C', # should contain dispaly_name if both name and display_name are provided
-                'calories': 500
+                'score': 500
             },
             {
                 'id': 4,
                 'external_id': '26',
                 'name': 'Competitor 4',
-                'calories': 0
+                'score': 0
             }
         ]
 
@@ -76,7 +76,7 @@ class ChallengeViewTests(DatabaseTestCase):
         self.assertEqual('Challenge 1', challenge['title'])
         teams = [team['name'] for team in challenge['teams']]
         self.assertEqual(['Team A', 'Team B'], teams)
-        self.assertEqual([1501, 120], [team['calories'] for team in challenge['teams']])
+        self.assertEqual([1501, 120], [team['score'] for team in challenge['teams']])
 
     def test_challenge_does_not_exist(self):
         response = self.client.get('/challenge/1000/')
