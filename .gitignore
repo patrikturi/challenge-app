@@ -1,8 +1,8 @@
-.venv/
 .idea/
 .vscode/
 core/db/
 virtualenv/
+virtualenv-prod/
 *.pyc
 core/logs/
 .env
