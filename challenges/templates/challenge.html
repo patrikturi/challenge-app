@@ -4,11 +4,11 @@
 
 {% block content %}
 
-<div class='challenge-title'><a href="https://endomondo.com/" target="_blank"><img alt="Endomondo" title="Endomondo" src="{% static 'img/endomondo-logo.png' %}" width=40 height=40/></a><h2>{{title}}</h2></div>
 {% with ch=challenge %}
+<div class='challenge-title'><a href="{{ch.provider.url}}" target="_blank"><img alt="{{ch.provider.name}}" title="{{ch.provider.name}}" src="{{ch.provider.logo_url}}" width=40 height=40/></a><h2>{{title}}</h2></div>
 <div class="row row-challenge-header">
     <div class='col-sm-4'>
-        <a href='https://www.endomondo.com/challenges/{{ch.external_id}}' target="_blank" rel="noopener noreferrer">Challenge link <i class="fas fa-external-link-alt"></i></a>
+        {% if ch.external_url %}<a href='{{ch.external_url}}' target="_blank" rel="noopener noreferrer">Challenge link <i class="fas fa-external-link-alt"></i></a>{% endif %}
     </div>
     <div class='col-sm-4'>
         Start: {% if ch.start_date %} {{ch.start_date}} {% else %} Unknown {% endif %}
@@ -49,7 +49,7 @@
                     {% for competitor in team.members %}
                             <tr>
                                 <td class='competitor-name'>
-                                    <a href='https://www.endomondo.com/profile/{{competitor.external_id}}' target="_blank" rel="noopener noreferrer">
+                                    <a href='{{competitor.external_url}}' target="_blank" rel="noopener noreferrer">
                                     {% if competitor.name %}
                                         {{competitor.name}}
                                     {% else %}

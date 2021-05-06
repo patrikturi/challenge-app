@@ -11,11 +11,11 @@ from challenges.models import Challenge, Competitor, Team
 
 
 class ChallengeAdmin(admin.ModelAdmin):
-    fields = ('external_id', 'external_link', 'site_link', 'competitors_without_team', 'status')
+    fields = ('external_id', 'external_link', 'site_link', 'competitors_without_team', 'status', 'kind')
     readonly_fields = ('external_link', 'site_link', 'competitors_without_team', 'status' )
 
     def external_link(self, obj):
-        return mark_safe('<a href="{}/challenges/{}">{} link</a>'.format(settings.CHALLENGES_THIRD_PARTY_HOST_URL, obj.external_id, settings.CHALLENGES_THIRD_PARTY_NAME))
+        return mark_safe('<a href="{}">{} link</a>'.format(obj.external_url, obj.kind)) if obj.external_url else '-'
 
     def site_link(self, obj):
         return mark_safe('<a href="/challenge/{}/">Site link</a>'.format(obj.id))

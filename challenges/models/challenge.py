@@ -33,6 +33,16 @@ class ChallengeTypes(models.TextChoices):
         obj.enabled = enabled
         return obj
 
+    @classmethod
+    def get_provider(cls, challenge_type):
+        from challenges.providers import EndomondoProvider, StravaProvider, DummyProvider
+        if challenge_type == cls.ENDOMONDO.value:
+            return EndomondoProvider()
+        elif challenge_type == cls.STRAVA.value:
+            return StravaProvider()
+        else:
+            return DummyProvider()
+
 
 class Challenge(models.Model):
 
@@ -67,6 +77,14 @@ class Challenge(models.Model):
             stats, _ = Stats.objects.get_or_create(challenge=self, competitor=competitor)
             stats.value = comp_dict['calories']
             stats.save()
+
+    @property
+    def provider(self):
+        return ChallengeTypes.get_provider(self.kind)
+
+    @property
+    def external_url(self):
+        return self.provider.get_challenge_url(self.external_id)
 
     def __str__(self):
         name = '"{}"'.format(self.title) if self.title else self.external_id

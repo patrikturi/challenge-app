@@ -1,3 +1,5 @@
+from unittest.mock import ANY
+
 from challenges.test.helpers import DatabaseTestCase
 
 
@@ -19,6 +21,8 @@ class ChallengeViewTests(DatabaseTestCase):
             'parse_date': None,
             'parse_error': None,
             'status_text': '-',
+            'provider': ANY,
+            'external_url': 'https://example.com/challenges/5',
         }
 
         challenge = response.data['challenge']
@@ -46,19 +50,22 @@ class ChallengeViewTests(DatabaseTestCase):
                 'id': 1,
                 'external_id': '10',
                 'name': 'Competitor 1',
-                'score': 1001
+                'score': 1001,
+                'external_url': 'https://example.com/profile/10'
             },
             {
                 'id': 3,
                 'external_id': '25',
                 'name': 'Competitor C', # should contain dispaly_name if both name and display_name are provided
-                'score': 500
+                'score': 500,
+                'external_url': 'https://example.com/profile/25'
             },
             {
                 'id': 4,
                 'external_id': '26',
                 'name': 'Competitor 4',
-                'score': 0
+                'score': 0,
+                'external_url': 'https://example.com/profile/26'
             }
         ]
 

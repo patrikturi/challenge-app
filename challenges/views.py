@@ -7,7 +7,6 @@ from rest_framework.views import APIView
 from challenges.models import Challenge
 from challenges.serializers import ChallengeSerializer, ChallengeDetailsSerializer
 
-
 class GetChallenge(APIView):
     template_name = 'challenge.html'
 
@@ -23,7 +22,7 @@ class GetChallenge(APIView):
         data = {
             'title': challenge.title,
             'page_name': 'Home',
-            'challenge': ChallengeDetailsSerializer(challenge).data
+            'challenge': ChallengeDetailsSerializer(challenge).data,
         }
         return Response(data)
 

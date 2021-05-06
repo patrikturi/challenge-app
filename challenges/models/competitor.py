@@ -1,5 +1,4 @@
 from django.db import models
-from django.conf import settings
 
 from challenges.models import Team
 
@@ -8,7 +7,7 @@ class Competitor(models.Model):
 
     external_id = models.IntegerField(unique=True)
     name = models.CharField(max_length=100, blank=True)
-    display_name = models.CharField(max_length=100, blank=True, help_text=f'Optional, name will be parsed form {settings.CHALLENGES_THIRD_PARTY_NAME} if not specified')
+    display_name = models.CharField(max_length=100, blank=True, help_text=f'Optional, name will be parsed form the data external site if not specified')
     teams = models.ManyToManyField(Team, related_name='competitors', blank=True)
 
     def __str__(self):

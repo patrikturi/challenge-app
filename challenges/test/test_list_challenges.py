@@ -1,5 +1,5 @@
 from datetime import date, datetime
-from unittest.mock import patch
+from unittest.mock import patch, ANY
 
 from challenges.test.helpers import DatabaseTestCase
 from challenges.models import Challenge
@@ -40,7 +40,7 @@ class ListChallengesTestCase(DatabaseTestCase):
     def test_challenge_short_view(self):
         response = self.client.get('/challenges/')
         actual_ch = _get_by_id(response.data['challenges'], 1)
-        expected_ch = {'id':1, 'title': 'Challenge 0', 'start_date': '2019-11-20'}
+        expected_ch = {'id':1, 'title': 'Challenge 0', 'start_date': '2019-11-20', 'provider': ANY}
         self.assertEqual(expected_ch, dict(actual_ch))
 
     def test_ended_challenges(self):
