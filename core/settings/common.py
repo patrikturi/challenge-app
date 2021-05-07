@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'challenges',
     'fetcher',
+    'strava',
 ]
 
 MIDDLEWARE = [
