@@ -7,12 +7,23 @@ from django.core.exceptions import ValidationError
 from django.utils.safestring import mark_safe
 from django.db.models import Q
 
-from challenges.models import Challenge, Competitor, Team
+from challenges.models import Challenge, Competitor, Team, ExternalProfile, ChallengeTypes, DataProviderType
+
+
+class ChallengeForm(forms.ModelForm):
+
+    def clean(self):
+        super().clean()
+        ch = self.instance
+        is_kind_changed = ch and ch.kind != self.cleaned_data.get('kind')
+        if (not ch or is_kind_changed) and self.cleaned_data.get('kind') == ChallengeTypes.ENDOMONDO.value:
+            raise ValidationError('Endomondo is no longer supported')
 
 
 class ChallengeAdmin(admin.ModelAdmin):
     fields = ('external_id', 'external_link', 'site_link', 'competitors_without_team', 'status', 'kind')
     readonly_fields = ('external_link', 'site_link', 'competitors_without_team', 'status' )
+    form = ChallengeForm
 
     def external_link(self, obj):
         return mark_safe('<a href="{}">{} link</a>'.format(obj.external_url, obj.kind)) if obj.external_url else '-'
@@ -34,6 +45,7 @@ class ChallengeAdmin(admin.ModelAdmin):
         status_class = ' style="color:red"' if obj.parse_error else ''
         html = '<span{}>{}</span>'.format(status_class, obj.status_text)
         return mark_safe(html)
+
 
 class CompetitorForm(forms.ModelForm):
 
@@ -60,13 +72,26 @@ class CompetitorForm(forms.ModelForm):
             raise ValidationError('The following teams are in the same challenge: {}'.format(duplicate_names_str))
 
 
+class ExternalProfileForm(forms.ModelForm):
+
+    def clean(self):
+        super().clean()
+        p = self.instance
+        is_kind_changed = p and p.kind != self.cleaned_data.get('kind')
+        if (not p or is_kind_changed) and self.cleaned_data.get('kind') == DataProviderType.ENDOMONDO.value:
+            raise ValidationError('Endomondo is no longer supported')
+
+
+class ExternalProfileInline(admin.StackedInline):
+    model = ExternalProfile
+    fields = ('external_id', 'kind')
+    form = ExternalProfileForm
+    extra = 1
+
 class CompetitorAdmin(admin.ModelAdmin):
     fields = ('display_name', 'teams')
     form = CompetitorForm
-
-    # Competitors are parsed/created from the third party, it is not needed to create them manually
-    def has_add_permission(self, request, obj=None):
-        return False
+    inlines = [ExternalProfileInline]
 
 
 admin.site.register(Challenge, ChallengeAdmin)

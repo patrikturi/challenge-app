@@ -5,7 +5,7 @@ from challenges.models import Team
 
 class Competitor(models.Model):
 
-    display_name = models.CharField(max_length=100, blank=True)
+    display_name = models.CharField(max_length=100)
     teams = models.ManyToManyField(Team, related_name='competitors', blank=True)
 
     def __str__(self):
