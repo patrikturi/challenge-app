@@ -22,7 +22,8 @@ class ChallengeViewTests(DatabaseTestCase):
             'parse_error': None,
             'status_text': '-',
             'provider': ANY,
-            'external_url': 'https://example.com/challenges/5',
+            'score_units': 'km',
+            'external_url': None,
         }
 
         challenge = response.data['challenge']
@@ -45,27 +46,28 @@ class ChallengeViewTests(DatabaseTestCase):
         self.assertEqual(expected_team, dict(team))
 
     def test_team_members(self):
+
         expected_members = [
             {
                 'id': 1,
                 'external_id': '10',
                 'name': 'Competitor 1',
                 'score': 1001,
-                'external_url': 'https://example.com/profile/10'
+                'external_url': 'https://strava.com/athletes/10'
             },
             {
                 'id': 3,
                 'external_id': '25',
                 'name': 'Competitor C', # should contain dispaly_name if both name and display_name are provided
                 'score': 500,
-                'external_url': 'https://example.com/profile/25'
+                'external_url': 'https://strava.com/athletes/25'
             },
             {
                 'id': 4,
                 'external_id': '26',
                 'name': 'Competitor 4',
                 'score': 0,
-                'external_url': 'https://example.com/profile/26'
+                'external_url': 'https://strava.com/athletes/26'
             }
         ]
 

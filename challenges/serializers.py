@@ -2,20 +2,26 @@ from django.db.models import Prefetch
 from rest_framework import serializers
 from rest_framework.fields import SerializerMethodField
 
-from .models.challenge import Challenge
-from .models.competitor import Competitor
-from .models.stats import Stats
-from .models.team import Team
+from .models import Challenge, Competitor, Stats, Team, ExternalProfile
 
 
 class CompetitorSerializer(serializers.ModelSerializer):
-    external_id = serializers.CharField()
+    external_id = serializers.SerializerMethodField()
     name = serializers.SerializerMethodField()
     score = serializers.SerializerMethodField()
     external_url = serializers.SerializerMethodField()
 
+    def _get_profile(self, obj):
+        profiles = obj.external_profiles.all()
+        return profiles[0] if len(profiles) > 0 else None
+
     def get_name(self, obj):
-        return obj.get_name()
+        p = self._get_profile(obj)
+        return obj.get_name(p.name if p else None)
+
+    def get_external_id(self, obj):
+        p = self._get_profile(obj)
+        return str(p.external_id) if p else ''
 
     def get_score(self, obj):
         try:
@@ -24,7 +30,7 @@ class CompetitorSerializer(serializers.ModelSerializer):
             return 0
 
     def get_external_url(self, obj):
-        return self.context['provider'].get_competitor_url(obj.external_id)
+        return self.context['provider'].get_competitor_url(self.get_external_id(obj))
 
     class Meta:
         model = Competitor
@@ -69,8 +75,10 @@ class ChallengeDetailsSerializer(serializers.ModelSerializer):
         self._provider = None
 
     def get_teams(self, obj):
+        provider_type =  obj.provider.get_type()
         teams = Team.objects.filter(challenge=obj).prefetch_related('competitors') \
-                .prefetch_related(Prefetch('competitors__stats', queryset=Stats.objects.filter(challenge=obj)))
+                .prefetch_related(Prefetch('competitors__stats', queryset=Stats.objects.filter(challenge=obj))) \
+                .prefetch_related(Prefetch('competitors__external_profiles', queryset=ExternalProfile.objects.filter(kind=provider_type)))
         return TeamSerializer(teams, context={'provider': obj.provider}, many=True).data
 
     def get_provider(self, obj):
@@ -79,7 +87,7 @@ class ChallengeDetailsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Challenge
         fields = ('id', 'title', 'start_date', 'end_date', 'parse_error', 'status_text', 'parse_date', 'external_id',
-                  'teams', 'provider', 'external_url')
+                  'teams', 'provider', 'score_units', 'external_url')
 
 
 class ChallengeSerializer(serializers.ModelSerializer):

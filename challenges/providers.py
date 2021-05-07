@@ -1,7 +1,11 @@
 from django.conf import settings
+from challenges.models import DataProviderType
 
 
 class DataProvider:
+
+    def get_type(self):
+        raise NotImplementedError()
 
     def get_name(self):
         raise NotImplementedError()
@@ -29,6 +33,9 @@ class DataProvider:
 class DummyProvider(DataProvider):
     """Used in unit tests"""
 
+    def get_type(self):
+        return 'Dummy'
+
     def get_name(self):
         return 'Unknown'
 
@@ -44,6 +51,9 @@ class DummyProvider(DataProvider):
 
 class EndomondoProvider(DataProvider):
 
+    def get_type(self):
+        return DataProviderType.ENDOMONDO
+
     def get_name(self):
         return 'Endomondo'
 
@@ -58,6 +68,9 @@ class EndomondoProvider(DataProvider):
 
 
 class StravaProvider(DataProvider):
+
+    def get_type(self):
+        return DataProviderType.STRAVA
 
     def get_name(self):
         return 'Strava'

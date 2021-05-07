@@ -1,17 +1,16 @@
 from datetime import date
 from unittest.mock import Mock
+
 from django.test import TestCase
 
-from challenges.models import Challenge, Competitor, Stats
+from challenges.models import Challenge, Competitor, Stats, ExternalProfile, DataProviderType
 
 
 class ChallengeTests(TestCase):
 
     def setUp(self):
         super().setUp()
-        challenge = Challenge(external_id=10)
-        self.challenge = challenge
-        challenge.save()
+        self.challenge = Challenge.objects.create(external_id=10, kind=DataProviderType.ENDOMONDO)
 
         challenge_page = Mock()
         self.challenge_page = challenge_page
@@ -41,11 +40,12 @@ class ChallengeTests(TestCase):
         comp1_eid = 5
         comp2_eid = 20
 
-        comp1_orig = Competitor(external_id=comp1_eid, name='Name1', display_name=orig_display_name)
-        comp1_orig.save()
+        comp1 = Competitor.objects.create(display_name=orig_display_name)
+        profile1 = ExternalProfile.objects.create(competitor=comp1, external_id=comp1_eid, name='Name1', kind=DataProviderType.ENDOMONDO)
+        comp2 = Competitor.objects.create()
+        profile2 = ExternalProfile.objects.create(competitor=comp2, external_id=comp2_eid, kind=DataProviderType.ENDOMONDO)
 
-        stats1_orig = Stats(challenge=challenge, competitor=comp1_orig, value=2)
-        stats1_orig.save()
+        stats1 = Stats.objects.create(challenge=challenge, competitor=comp1, value=2)
 
         page_comp1 = {'name': 'New Name', 'external_id': comp1_eid, 'calories': 100}
         page_comp2 = {'name': 'Comp2', 'external_id': comp2_eid, 'calories': 111}
@@ -53,13 +53,14 @@ class ChallengeTests(TestCase):
         # WHEN
         challenge.update(challenge_page)
         # THEN
-        comp1 = Competitor.objects.get(external_id=comp1_eid)
-        comp2 = Competitor.objects.get(external_id=comp2_eid)
-        stats1 = Stats.objects.get(challenge=challenge, competitor=comp1)
+        comp1.refresh_from_db()
+        profile1.refresh_from_db()
+        profile2 = ExternalProfile.objects.get(external_id=comp2_eid)
+        stats1.refresh_from_db()
         stats2 = Stats.objects.get(challenge=challenge, competitor=comp2)
 
-        self.assertEqual(page_comp1['name'], comp1.name)
+        self.assertEqual(page_comp1['name'], profile1.name)
         self.assertEqual(orig_display_name, comp1.display_name)
         self.assertEqual(page_comp1['calories'], stats1.value)
-        self.assertEqual(page_comp2['name'], comp2.name)
+        self.assertEqual(page_comp2['name'], profile2.name)
         self.assertEqual(page_comp2['calories'], stats2.value)

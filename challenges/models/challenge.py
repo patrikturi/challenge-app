@@ -24,12 +24,13 @@ class ChallengeManager(models.Manager):
 
 
 class ChallengeTypes(models.TextChoices):
-    ENDOMONDO = 'ENDOMONDO', False
-    STRAVA = 'STRAVA', True
+    ENDOMONDO = 'ENDOMONDO', 'kcal', False
+    STRAVA = 'STRAVA', 'km', True
 
-    def __new__(cls, svalue, enabled):
+    def __new__(cls, svalue, score_units, enabled):
         obj = str.__new__(cls, svalue)
         obj._value_ = svalue
+        obj.score_units = score_units
         obj.enabled = enabled
         return obj
 
@@ -57,7 +58,7 @@ class Challenge(models.Model):
     objects = ChallengeManager()
 
     def update(self, challenge_page):
-        from challenges.models import Competitor, Stats
+        from challenges.models import Competitor, Stats, ExternalProfile
 
         self.title = challenge_page.title
         self.start_date = challenge_page.start_date
@@ -67,20 +68,26 @@ class Challenge(models.Model):
         self.parse_date = timezone.now()
         self.save(force_update=True)
 
+        provider_type = self.provider.get_type()
+
         for comp_dict in challenge_page.competitors:
             external_id = comp_dict['external_id']
 
-            competitor, _ = Competitor.objects.get_or_create(external_id=external_id)
-            competitor.name = comp_dict['name']
-            competitor.save()
+            profile = ExternalProfile.objects.get(external_id=external_id, kind=provider_type)
+            profile.name = comp_dict['name']
+            profile.save()
 
-            stats, _ = Stats.objects.get_or_create(challenge=self, competitor=competitor)
+            stats, _ = Stats.objects.get_or_create(challenge=self, competitor_id=profile.competitor_id)
             stats.value = comp_dict['calories']
             stats.save()
 
     @property
     def provider(self):
         return ChallengeTypes.get_provider(self.kind)
+
+    @property
+    def score_units(self):
+        return ChallengeTypes[self.kind].score_units
 
     @property
     def external_url(self):

@@ -15,8 +15,10 @@ class Competitor(models.Model):
             name = self.external_id
         return 'Competitor {}'.format(name)
 
-    def get_name(self):
+    def get_name(self, external_name=None):
         if self.display_name:
             return self.display_name
+        elif external_name:
+            return external_name
         else:
-            return 'Competitor {}'.format(self.external_id)
+            return 'Competitor {}'.format(self.id)

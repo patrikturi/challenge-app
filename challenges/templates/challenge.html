@@ -39,7 +39,7 @@
                     <button class="team-header-cell btn btn-link btn-show-team" type="button" data-toggle="collapse" data-target="#collapse{{team.id}}" aria-expanded="true" aria-controls="collapse{{team.id}}">
                     {{team.name}}
                     </button>
-                </div><div class="team-header-cell team-card-score">{{team.score}} kcal</div>
+                </div><div class="team-header-cell team-card-score">{{team.score}} {{ch.score_units}}</div>
                 </div>
             
                 <div id="collapse{{team.id}}" class="collapse" aria-labelledby="heading{{team.id}}" data-parent="#accordionExample">
@@ -57,7 +57,7 @@
                                     {% endif %}
                                     </a>
                                 </td>
-                                <td>{{competitor.score}} kcal</td>
+                                <td>{{competitor.score}} {{ch.score_units}}</td>
                             </tr>
                     {% endfor %}
                         </tbody>
