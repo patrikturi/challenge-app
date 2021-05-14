@@ -1,14 +1,11 @@
 from core.settings.common import *
+from core.settings.overrides import *
 
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
 
 
 DEBUG = False
-
-SECRET_KEY = os.environ['SECRET_KEY']
-
-ALLOWED_HOSTS = ['*']
 
 sentry_sdk.init(
     integrations=[DjangoIntegration()],
@@ -18,5 +15,5 @@ sentry_sdk.init(
     send_default_pii=True
 )
 
-ENDOMONDO_USERNAME = os.environ['ENDOMONDO_USER']
-ENDOMONDO_PASSWORD = os.environ['ENDOMONDO_PASSWORD']
+SECRET_KEY = os.environ['SECRET_KEY']
+STRAVA_SECRET = os.environ['STRAVA_SECRET']

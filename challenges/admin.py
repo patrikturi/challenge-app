@@ -21,7 +21,7 @@ class ChallengeForm(forms.ModelForm):
 
 
 class ChallengeAdmin(admin.ModelAdmin):
-    fields = ('external_id', 'external_link', 'site_link', 'competitors_without_team', 'status', 'kind')
+    fields = ('external_id', 'title', 'start_date', 'end_date', 'external_link', 'site_link', 'competitors_without_team', 'status', 'kind')
     readonly_fields = ('external_link', 'site_link', 'competitors_without_team', 'status' )
     form = ChallengeForm
 

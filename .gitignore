@@ -8,3 +8,4 @@ core/logs/
 .env
 core/static/
 db.sqlite3
+core/settings/overrides.py

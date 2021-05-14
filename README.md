@@ -16,10 +16,9 @@ This app lets you host team challenges. Teams can be set up in the admin site an
 * `cd challenge-app`
 * Create `.env` file and fill in these secrets:
 ```
-ENDOMONDO_USER=
-ENDOMONDO_PASSWORD=
 SECRET_KEY=
 SENTRY_DSN=
+STRAVA_SECRET=
 ```
 ENDOMONDO_USER & PASSWORD: login credentials to endomondo.com. SECRET_KEY: generate a key [here](https://miniwebtool.com/django-secret-key-generator/) and copy it. SENTRY_DSN: copy it from https://sentry.io -> Settings -> Client Keys (DSN) -> DSN - it is a special link to the sentry server.
 * Install `docker` and `docker-compose`

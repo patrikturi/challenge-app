@@ -8,7 +8,6 @@ from challenges.models import Challenge
 from challenges.serializers import ChallengeSerializer, ChallengeDetailsSerializer
 
 class GetChallenge(APIView):
-    template_name = 'challenge.html'
 
     def get(self, request, pk, query):
         try:
@@ -24,7 +23,7 @@ class GetChallenge(APIView):
             'page_name': 'Home',
             'challenge': ChallengeDetailsSerializer(challenge).data,
         }
-        return Response(data)
+        return Response(data, template_name=challenge.provider.get_template_name())
 
     def get_queryset(self, pk, query):
         if query == 'last':

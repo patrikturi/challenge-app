@@ -7,6 +7,10 @@
 {% with ch=challenge %}
 <div class='challenge-title'><a href="{{ch.provider.url}}" target="_blank"><img alt="{{ch.provider.name}}" title="{{ch.provider.name}}" src="{{ch.provider.logo_url}}" width=40 height=40/></a><h2>{{title}}</h2></div>
 <div class="row row-challenge-header">
+{% block before-challenge %}
+{% endblock %}
+</div>
+<div class="row row-challenge-header">
     <div class='col-sm-4'>
         {% if ch.external_url %}<a href='{{ch.external_url}}' target="_blank" rel="noopener noreferrer">Challenge link <i class="fas fa-external-link-alt"></i></a>{% endif %}
     </div>
@@ -41,7 +45,7 @@
                     </button>
                 </div><div class="team-header-cell team-card-score">{{team.score}} {{ch.score_units}}</div>
                 </div>
-            
+
                 <div id="collapse{{team.id}}" class="collapse" aria-labelledby="heading{{team.id}}" data-parent="#accordionExample">
                 <div class="card-body">
                     <table class="table">

@@ -1,5 +1,6 @@
 from django.conf import settings
 from challenges.models import DataProviderType
+from strava import strava_api
 
 
 class DataProvider:
@@ -21,6 +22,9 @@ class DataProvider:
 
     def get_logo_url(self):
         return settings.STATIC_URL + f'img/{self.get_name().lower()}-logo.png'
+
+    def get_template_name(self):
+        return 'challenge.html'
 
     def to_representation(self):
         return {
@@ -83,3 +87,11 @@ class StravaProvider(DataProvider):
 
     def get_competitor_url(self, external_id):
         return f'https://strava.com/athletes/{external_id}'
+
+    def get_template_name(self):
+        return 'strava_challenge.html'
+
+    def to_representation(self):
+        repr = super().to_representation()
+        repr['auth_uri'] = strava_api.get_auth_uri()
+        return repr

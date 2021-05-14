@@ -1,0 +1,7 @@
+{% extends "challenge.html" %}
+
+{% block before-challenge %}
+<div class='col-sm-6'>
+    <a href='{{ch.provider.auth_uri}}' target="_blank">Connect Strava account <i class="fas fa-external-link-alt"></i></a>
+</div>
+{% endblock %}
