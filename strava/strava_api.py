@@ -1,5 +1,7 @@
 import json
 import requests
+import time
+import os
 
 from django.conf import settings
 
@@ -15,10 +17,10 @@ def get_auth_uri():
     return auth_uri
 
 
-def get_token(grant_type, code, athlete=None):
+def get_token(grant_type, code):
     token_exchange_data = {
         'client_id': settings.STRAVA_CLIENT_ID,
-        'client_secret': settings.STRAVA_CLIENT_SECRET,
+        'client_secret': settings.STRAVA_SECRET,
         'grant_type': grant_type,
         'code': code,
     }
@@ -29,4 +31,11 @@ def get_token(grant_type, code, athlete=None):
 
     resp = requests.post(url=f'{STRAVA_OAUTH_URL}/token', data=token_exchange_data)
 
+    return resp.json()
+
+
+def get_activities(access_token):
+    resp = requests.get(f'{STRAVA_API_URL}/activities', headers={
+        'Authorization': f'Bearer {access_token}'
+    })
     return resp.json()
