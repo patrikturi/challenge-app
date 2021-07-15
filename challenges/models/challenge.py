@@ -22,6 +22,11 @@ class ChallengeManager(models.Manager):
         challenges = self.filter(Q(end_date__gt=end) | Q(end_date__isnull=True)).order_by('-start_date')
         return challenges
 
+    def get_active(self, kind):
+        now = timezone.now()
+        challenges = self.filter((Q(end_date__gte=now) | Q(end_date__isnull=True)) & Q(start_date__lte=now), kind=kind).order_by('-start_date')
+        return challenges
+
 
 class ChallengeTypes(models.TextChoices):
     ENDOMONDO = 'ENDOMONDO', 'kcal', False

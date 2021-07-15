@@ -1,4 +1,5 @@
 from collections import Counter
+from strava.models.token import StravaToken
 
 from django import forms
 from django.contrib import admin
@@ -97,3 +98,4 @@ class CompetitorAdmin(admin.ModelAdmin):
 admin.site.register(Challenge, ChallengeAdmin)
 admin.site.register(Team)
 admin.site.register(Competitor, CompetitorAdmin)
+admin.site.register(StravaToken)

@@ -7,7 +7,7 @@ from strava.strava_api import get_token
 
 
 class StravaToken(models.Model):
-    profile = models.ForeignKey(ExternalProfile, on_delete=models.CASCADE)
+    profile = models.ForeignKey(ExternalProfile, related_name='strava_tokens', on_delete=models.CASCADE)
     _access_token = models.CharField(max_length=100)
     refresh_token = models.CharField(max_length=100)
     expires_at = models.IntegerField()

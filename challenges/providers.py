@@ -26,6 +26,12 @@ class DataProvider:
     def get_template_name(self):
         return 'challenge.html'
 
+    def get_team_score(self, competitors):
+        raise NotImplemented()
+
+    def get_score(self, stats):
+        raise NotImplemented()
+
     def to_representation(self):
         return {
             'name': self.get_name(),
@@ -70,6 +76,15 @@ class EndomondoProvider(DataProvider):
     def get_competitor_url(self, external_id):
         return f'https://endomondo.com/profile/{external_id}'
 
+    def get_team_score(self, competitors):
+        return sum([
+            sum([stat.value for stat in comp.stats.all()])
+            for comp in competitors.all()
+        ])
+
+    def get_score(self, stats):
+        sum(stat.value for stat in stats.all())
+
 
 class StravaProvider(DataProvider):
 
@@ -87,6 +102,15 @@ class StravaProvider(DataProvider):
 
     def get_competitor_url(self, external_id):
         return f'https://strava.com/athletes/{external_id}'
+
+    def get_team_score(self, competitors):
+        return sum([
+            sum([stat.value for stat in comp.stats.all()])
+            for comp in competitors.all()
+        ]) / 1000
+
+    def get_score(self, stats):
+        return sum(stat.value for stat in stats.all()) / 1000
 
     def get_template_name(self):
         return 'strava_challenge.html'

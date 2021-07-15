@@ -1,4 +1,4 @@
-from django.db.models import Prefetch
+from django.db.models import Prefetch, Q
 from rest_framework import serializers
 from rest_framework.fields import SerializerMethodField
 
@@ -25,7 +25,7 @@ class CompetitorSerializer(serializers.ModelSerializer):
 
     def get_score(self, obj):
         try:
-            return sum(stat.value for stat in obj.stats.all())
+            return self.context['provider'].get_score(obj.stats)
         except Stats.DoesNotExist:
             return 0
 
@@ -52,10 +52,7 @@ class TeamSerializer(serializers.ModelSerializer):
         ]
 
     def get_score(self, obj):
-        return sum([
-            sum([stat.value for stat in comp.stats.all()])
-            for comp in obj.competitors.all()
-        ])
+        return self.context['provider'].get_team_score(obj.competitors)
 
     def get_competitors(self, obj):
         return Competitor.objects.filter(teams__id=obj.id)
@@ -77,7 +74,7 @@ class ChallengeDetailsSerializer(serializers.ModelSerializer):
     def get_teams(self, obj):
         provider_type =  obj.provider.get_type()
         teams = Team.objects.filter(challenge=obj).prefetch_related('competitors') \
-                .prefetch_related(Prefetch('competitors__stats', queryset=Stats.objects.filter(challenge=obj))) \
+                .prefetch_related(Prefetch('competitors__stats', queryset=Stats.objects.filter(Q(challenge=obj) | Q(challenge=None)))) \
                 .prefetch_related(Prefetch('competitors__external_profiles', queryset=ExternalProfile.objects.filter(kind=provider_type)))
         return TeamSerializer(teams, context={'provider': obj.provider}, many=True).data
 

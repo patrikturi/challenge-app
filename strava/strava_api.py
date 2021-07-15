@@ -1,7 +1,6 @@
-import json
+from urllib.parse import urlencode
+
 import requests
-import time
-import os
 
 from django.conf import settings
 
@@ -33,9 +32,23 @@ def get_token(grant_type, code):
 
     return resp.json()
 
+PAGE_SIZE = 30
 
-def get_activities(access_token):
-    resp = requests.get(f'{STRAVA_API_URL}/activities', headers={
-        'Authorization': f'Bearer {access_token}'
-    })
-    return resp.json()
+def get_activities(access_token, before=None, after=None):
+    activities = []
+    page = 1
+    while True:
+        query = {'before': before, 'after': after, 'page': page, 'per_page': PAGE_SIZE}
+        query = {k: v for k, v in query.items() if v is not None}
+
+
+        resp = requests.get(f'{STRAVA_API_URL}/activities?{urlencode(query)}', headers={
+            'Authorization': f'Bearer {access_token}'
+        })
+        data = resp.json()
+        activities.extend(data)
+        if len(data) < PAGE_SIZE:
+            break
+        page += 1
+
+    return activities

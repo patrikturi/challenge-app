@@ -11,15 +11,16 @@ class StatTypes(models.TextChoices):
     BIKE = 'BIKE'
     HIKE = 'HIKE'
 
+STRAVA_STAT_TYPES = [StatTypes.WALK.value, StatTypes.RUN.value, StatTypes.SWIM.value, StatTypes.BIKE.value, StatTypes.HIKE.value]
 
 class StatUnits(models.TextChoices):
     CALORIES = 'CALORIES'
-    KILOMETERS = 'KILOMETERS'
+    METERS = 'METERS'
 
 
 class Stats(models.Model):
     competitor = models.ForeignKey(Competitor, related_name='stats', on_delete=models.CASCADE)
-    challenge = models.ForeignKey(Challenge, related_name='stats', on_delete=models.CASCADE)
+    challenge = models.ForeignKey(Challenge, null=True, related_name='stats', on_delete=models.CASCADE)
     kind = models.CharField(max_length=16, choices=StatTypes.choices)
     unit = models.CharField(max_length=16, choices=StatUnits.choices)
     value = models.IntegerField(default=0)
